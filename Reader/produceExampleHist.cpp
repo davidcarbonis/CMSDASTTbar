@@ -108,11 +108,20 @@ int main()
                 continue;
             
             
-            // Require that there are at least four central jets with pt > 30 GeV. They are ordered
-            //in pt, and, thanks to it, it is sufficient to check pt of the 4th jet only
+            // Require that there are at least four central jets with pt > 30 GeV
             auto const &jets = reader.GetJets();
+            unsigned nGoodJets = 0;
             
-            if (jets.size() < 4 or jets.at(3).Pt() < 30.)
+            for (auto const &j: jets)
+            {
+                if (j.Pt() < 30.)  // jets are ordered in pt
+                    break;
+                
+                if (fabs(j.Eta()) < 2.4)
+                    ++nGoodJets;
+            }
+            
+            if (nGoodJets < 4)
                 continue;
             
             
