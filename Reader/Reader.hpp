@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <initializer_list>
 #include <memory>
 
 
@@ -28,7 +27,7 @@ public:
      * The trees will be read one by one, in the specified order. An exception is thrown if the
      * source file does not exist or is corrupted.
      */
-    Reader(std::shared_ptr<TFile> &srcFile, std::initializer_list<std::string> const &treeNames);
+    Reader(std::shared_ptr<TFile> &srcFile, std::list<std::string> const &treeNames);
     
     /**
      * \brief Constructor from a source file and name of a single tree

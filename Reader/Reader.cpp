@@ -12,7 +12,7 @@ using namespace std;
 unsigned const Reader::maxSize;
 
 
-Reader::Reader(shared_ptr<TFile> &srcFile_, initializer_list<string> const &treeNames_):
+Reader::Reader(shared_ptr<TFile> &srcFile_, list<string> const &treeNames_):
     srcFile(srcFile_), treeNames(treeNames_), curTreeNameIt(treeNames.begin())
 {
     // Make sure the source file is a valid one
@@ -26,7 +26,7 @@ Reader::Reader(shared_ptr<TFile> &srcFile_, initializer_list<string> const &tree
 
 
 Reader::Reader(shared_ptr<TFile> &srcFile_, string const &treeName):
-    Reader(srcFile_, {treeName})
+    Reader(srcFile_, list<string>{treeName})
 {}
 
 
