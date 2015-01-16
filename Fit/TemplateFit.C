@@ -40,23 +40,26 @@ void TemplateFit(){
 
 	//Declaration of variables
     RooRealVar nbkg("nbkg","nbkg", nBkg, 0,2*nBkg);
-    RooRealVar nsig("nsig","nsig", nSignal, 0,2*nSignal);  
-    RooRealVar nwjets("nwjets","nwjets", nWjets, 0,2*nWjets); 
+    /*
+     * Introduce other needed fit parameters
+     */ 
     
     //Data declaration
     RooDataHist data("data","data",var, dataHist);
     
-    //Model construction
+    //Model components
     RooDataHist sig("sig","sig",var, signalHist);
     RooHistPdf sigPdf("sigPdf","sigPdf",var, sig);
     
-    RooDataHist wjets("wjets","wjets",var, wjetHist);
-    RooHistPdf wjetsPdf("wjetsPdf","wjetsPdf",var, wjets);
-    
-	RooDataHist bkg("bkg","bkg",var, bkgHist);
-    RooHistPdf bkgPdf("bkgPdf","bkgPdf",var, bkg);
-    
-    RooAddPdf model("model","model", RooArgList(sigPdf,wjetsPdf,bkgPdf),RooArgList(nsig,nwjets,nbkg));    
+    /*
+     * Introduce other needed Pdfs
+     */
+     
+    //Model construction
+    /*
+     * complete the definition with needed information
+     */
+    RooAddPdf model("model","model", RooArgList(sigPdf,...),RooArgList(nsig,...));    
     
     //Fitting 
     model.fitTo(data);    
