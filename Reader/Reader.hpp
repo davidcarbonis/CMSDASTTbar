@@ -125,6 +125,9 @@ private:
     /// Total weight of the event
     double weight;
     
+    /// Flag that indicates if the current sample is simulation
+    bool isMC;
+    
     /// An object to perform CSV reweighting
     CSVReweighter csvReweighter;
     

@@ -61,12 +61,24 @@ bool Reader::ReadNextEvent()
         jets.emplace_back(jetPt[i], jetEta[i], jetPhi[i], jetBTag[i], jetFlavour[i]);
     
     met.Set(metPt, metPhi);
-    weight = rawWeight;
     
     
     // Make sure vector of leptons and jets are ordered in pt
     sort(leptons.rbegin(), leptons.rend());
     sort(jets.rbegin(), jets.rend());
+    
+    
+    // Calculate event weight
+    weight = rawWeight;
+    
+    if (isMC)
+        for (auto const &j: jets)
+        {
+            double const perJetBTagWeight = csvReweighter.CalculateJetWeight(j);
+            
+            if (perJetBTagWeight != 0.)
+                weight *= perJetBTagWeight;
+        }
     
     
     return true;
@@ -140,9 +152,15 @@ void Reader::GetTree(string const &name)
     curTree->SetBranchAddress("smalltree_jet_eta", jetEta);
     curTree->SetBranchAddress("smalltree_jet_phi", jetPhi);
     curTree->SetBranchAddress("smalltree_jet_btagdiscri", jetBTag);
+    curTree->SetBranchAddress("smalltree_jet_flav", jetFlavour);
     
     curTree->SetBranchAddress("smalltree_met_pt", &metPt);
     curTree->SetBranchAddress("smalltree_met_phi", &metPhi);
     
     curTree->SetBranchAddress("smalltree_evtweight", &rawWeight);
+    
+    
+    // FIXME: For the time being treat all samples as simulation. With the new file it will be
+    //possible to guess from the tree structure
+    isMC = true;
 }
