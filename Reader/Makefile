@@ -6,7 +6,7 @@ LDFLAGS = $(shell root-config --libs) -lTreePlayer -lHistPainter
 
 all: produceExampleHist
 
-produceExampleHist: produceExampleHist.o PhysicsObjects.o Reader.o
+produceExampleHist: produceExampleHist.o PhysicsObjects.o CSVReweighter.o Reader.o
 	@ g++ $+ $(CFLAGS) $(LDFLAGS) -o $@
 
 %.o: %.cpp

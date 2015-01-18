@@ -59,22 +59,22 @@ int main()
     //Define here what processes (what trees) are grouped together and assign some meaningful name
     //to each group
     list<Group> groups;
-    groups.emplace_back(Group("Data", {"SmallTree_NTuple_53X_SingleMuRun2012A",
-     "SmallTree_NTuple_53X_SingleMuRun2012B", "SmallTree_NTuple_53X_SingleMuRun2012C",
-     "SmallTree_NTuple_53X_SingleMuRun2012D"}));
-    groups.emplace_back(Group("ttbar", {"SmallTree_NTuple_53X_TTJetsMadgraphZ2"}));
+    // groups.emplace_back(Group("Data", {"SmallTree_NTuple_53X_SingleMuRun2012A",
+    //  "SmallTree_NTuple_53X_SingleMuRun2012B", "SmallTree_NTuple_53X_SingleMuRun2012C",
+    //  "SmallTree_NTuple_53X_SingleMuRun2012D"}));
+    // groups.emplace_back(Group("ttbar", {"SmallTree_NTuple_53X_TTJetsMadgraphZ2"}));
     groups.emplace_back(Group("SingleTop", {"SmallTree_NTuple_53X_T_t-channel",
      "SmallTree_NTuple_53X_Tbar_t-channel", "SmallTree_NTuple_53X_T_tW-channel",
      "SmallTree_NTuple_53X_Tbar_tW-channel"}));
-    groups.emplace_back(Group("Wjets", {"SmallTree_NTuple_53X_WJetsToLNu"}));
-    groups.emplace_back(Group("VV", {"SmallTree_NTuple_53X_WWJetsIncl", "SmallTree_NTuple_53X_WZJetsIncl",
-     "SmallTree_NTuple_53X_ZZJetsIncl"}));
-    groups.emplace_back(Group("DrellYan", {"SmallTree_NTuple_53X_DYJetsToLL_M-10To50",
-     "SmallTree_NTuple_53X_DYJetsToLL_M-50"}));
-    groups.emplace_back(Group("QCD", {"SmallTree_QCD_Pt-20to30_MuEnrichedPt5",
-     "SmallTree_QCD_Pt-30to50_MuEnrichedPt5", "SmallTree_QCD_Pt-50to80_MuEnrichedPt5",
-     "SmallTree_QCD_Pt-80to120_MuEnrichedPt5", "SmallTree_QCD_Pt-120to170_MuEnrichedPt5",
-     "SmallTree_QCD_Pt-170to300_MuEnrichedPt5", "SmallTree_QCD_Pt-300to470_MuEnrichedPt5"}));
+    // groups.emplace_back(Group("Wjets", {"SmallTree_NTuple_53X_WJetsToLNu"}));
+    // groups.emplace_back(Group("VV", {"SmallTree_NTuple_53X_WWJetsIncl", "SmallTree_NTuple_53X_WZJetsIncl",
+    //  "SmallTree_NTuple_53X_ZZJetsIncl"}));
+    // groups.emplace_back(Group("DrellYan", {"SmallTree_NTuple_53X_DYJetsToLL_M-10To50",
+    //  "SmallTree_NTuple_53X_DYJetsToLL_M-50"}));
+    // groups.emplace_back(Group("QCD", {"SmallTree_QCD_Pt-20to30_MuEnrichedPt5",
+    //  "SmallTree_QCD_Pt-30to50_MuEnrichedPt5", "SmallTree_QCD_Pt-50to80_MuEnrichedPt5",
+    //  "SmallTree_QCD_Pt-80to120_MuEnrichedPt5", "SmallTree_QCD_Pt-120to170_MuEnrichedPt5",
+    //  "SmallTree_QCD_Pt-170to300_MuEnrichedPt5", "SmallTree_QCD_Pt-300to470_MuEnrichedPt5"}));
     
     
     // Create an output file to store the histograms that will be created

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PhysicsObjects.hpp>
+#include <CSVReweighter.hpp>
 
 #include <TFile.h>
 #include <TTree.h>
@@ -123,6 +124,9 @@ private:
     
     /// Total weight of the event
     double weight;
+    
+    /// An object to perform CSV reweighting
+    CSVReweighter csvReweighter;
     
     
     // Buffers to read the trees
