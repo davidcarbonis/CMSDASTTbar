@@ -53,31 +53,35 @@ CSVReweighter::CSVReweighter()
         ostringstream nameFragment;
         nameFragment << "csv_ratio_Pt" << iPt << "_Eta0_final";
         
-        weightsBottom[Systematics::Nominal][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         nameFragment.str().c_str())));
-        weightsBottom[Systematics::JECUp][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (nameFragment.str() + "_JESUp").c_str())));
-        weightsBottom[Systematics::JECDown][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (nameFragment.str() + "_JESDown").c_str())));
-        weightsBottom[Systematics::PurityUp][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (nameFragment.str() + "_LFUp").c_str())));
-        weightsBottom[Systematics::PurityDown][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (nameFragment.str() + "_LFDown").c_str())));
-        weightsBottom[Systematics::StatUp][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (nameFragment.str() + "_Stats1Up").c_str())));
-        weightsBottom[Systematics::StatDown][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (nameFragment.str() + "_Stats1Down").c_str())));
+        weightsBottom[Systematics::Nominal][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get(nameFragment.str().c_str())));
+        weightsBottom[Systematics::JECUp][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_JESUp").c_str())));
+        weightsBottom[Systematics::JECDown][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_JESDown").c_str())));
+        weightsBottom[Systematics::PurityHFUp][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_LFUp").c_str())));
+        weightsBottom[Systematics::PurityHFDown][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_LFDown").c_str())));
+        weightsBottom[Systematics::StatHF1Up][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_Stats1Up").c_str())));
+        weightsBottom[Systematics::StatHF1Down][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_Stats1Down").c_str())));
+        weightsBottom[Systematics::StatHF2Up][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_Stats2Up").c_str())));
+        weightsBottom[Systematics::StatHF2Down][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((nameFragment.str() + "_Stats2Down").c_str())));
         
-        weightsCharm[Systematics::Nominal][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (string("c_") + nameFragment.str()).c_str())));
-        weightsCharm[Systematics::JECUp][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (string("c_") + nameFragment.str() + "_cErr1Up").c_str())));
-        weightsCharm[Systematics::JECDown][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (string("c_") + nameFragment.str() + "_cErr1Down").c_str())));
-        weightsCharm[Systematics::PurityUp][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (string("c_") + nameFragment.str() + "_cErr2Up").c_str())));
-        weightsCharm[Systematics::PurityDown][iPt].reset(reinterpret_cast<TH1D *>(dataFileHF->Get(
-         (string("c_") + nameFragment.str() + "_cErr2Down").c_str())));
+        weightsCharm[Systematics::Nominal][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((string("c_") + nameFragment.str()).c_str())));
+        weightsCharm[Systematics::CharmUnc1Up][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Up").c_str())));
+        weightsCharm[Systematics::CharmUnc1Down][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Down").c_str())));
+        weightsCharm[Systematics::CharmUnc2Up][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Up").c_str())));
+        weightsCharm[Systematics::CharmUnc2Down][iPt].reset(reinterpret_cast<TH1D *>(
+         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Down").c_str())));
     }
     
     
@@ -130,14 +134,18 @@ CSVReweighter::CSVReweighter()
              dataFileLF->Get((nameFragment.str() + "_JESUp").c_str())));
             weightsLight[Systematics::JECDown][iPt][iEta].reset(reinterpret_cast<TH1D *>(
              dataFileLF->Get((nameFragment.str() + "_JESDown").c_str())));
-            weightsLight[Systematics::PurityUp][iPt][iEta].reset(reinterpret_cast<TH1D *>(
+            weightsLight[Systematics::PurityLFUp][iPt][iEta].reset(reinterpret_cast<TH1D *>(
              dataFileLF->Get((nameFragment.str() + "_HFUp").c_str())));
-            weightsLight[Systematics::PurityDown][iPt][iEta].reset(reinterpret_cast<TH1D *>(
+            weightsLight[Systematics::PurityLFDown][iPt][iEta].reset(reinterpret_cast<TH1D *>(
              dataFileLF->Get((nameFragment.str() + "_HFDown").c_str())));
-            weightsLight[Systematics::StatUp][iPt][iEta].reset(reinterpret_cast<TH1D *>(
+            weightsLight[Systematics::StatLF1Up][iPt][iEta].reset(reinterpret_cast<TH1D *>(
              dataFileLF->Get((nameFragment.str() + "_Stats1Up").c_str())));
-            weightsLight[Systematics::StatDown][iPt][iEta].reset(reinterpret_cast<TH1D *>(
+            weightsLight[Systematics::StatLF1Down][iPt][iEta].reset(reinterpret_cast<TH1D *>(
              dataFileLF->Get((nameFragment.str() + "_Stats1Down").c_str())));
+            weightsLight[Systematics::StatLF2Up][iPt][iEta].reset(reinterpret_cast<TH1D *>(
+             dataFileLF->Get((nameFragment.str() + "_Stats2Up").c_str())));
+            weightsLight[Systematics::StatLF2Down][iPt][iEta].reset(reinterpret_cast<TH1D *>(
+             dataFileLF->Get((nameFragment.str() + "_Stats2Down").c_str())));
         }
     
     
@@ -165,7 +173,7 @@ CSVReweighter::CSVReweighter()
 }
 
 
-double CSVReweighter::GetJetWeight(Jet const &jet,
+double CSVReweighter::CalculateJetWeight(Jet const &jet,
  Systematics syst /*= Systematics::Nominal*/) const
 {
     // Find pt and eta bins into which the given jet falls
