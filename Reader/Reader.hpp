@@ -116,11 +116,19 @@ private:
     /// Leptons in the current events
     std::vector<Lepton> leptons;
     
-    /// Jets in the current event
-    std::vector<Jet> jets;
+    /**
+     * \brief Jets in the current event
+     * 
+     * Nominal collection and variations due to JEC uncertainty.
+     */
+    std::vector<Jet> jets, jetsJECUp, jetsJECDown;
     
-    /// MET in the current event
-    MET met;
+    /**
+     * \brief METs in the current event
+     * 
+     * Nominal value and systematical variations due to JEC uncertainty.
+     */
+    MET met, metJECUp, metJECDown;
     
     /// Total weight of the event
     double weight;
@@ -141,7 +149,18 @@ private:
     Float_t jetPt[maxSize], jetEta[maxSize], jetPhi[maxSize], jetBTag[maxSize];
     Int_t jetFlavour[maxSize];
     
+    Int_t jetJECUpSize;
+    Float_t jetJECUpPt[maxSize], jetJECUpEta[maxSize], jetJECUpPhi[maxSize], jetJECUpBTag[maxSize];
+    Int_t jetJECUpFlavour[maxSize];
+    
+    Int_t jetJECDownSize;
+    Float_t jetJECDownPt[maxSize], jetJECDownEta[maxSize], jetJECDownPhi[maxSize],
+     jetJECDownBTag[maxSize];
+    Int_t jetJECDownFlavour[maxSize];
+    
     Float_t metPt, metPhi;
+    Float_t metJECUpPt, metJECUpPhi;
+    Float_t metJECDownPt, metJECDownPhi;
     
     Float_t rawWeight;
 };

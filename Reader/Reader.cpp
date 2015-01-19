@@ -62,10 +62,33 @@ bool Reader::ReadNextEvent()
     
     met.Set(metPt, metPhi);
     
+    if (isMC)
+    {
+        jetsJECUp.clear();
+        jetsJECDown.clear();
+        
+        for (int i = 0; i < jetJECUpSize; ++i)
+            jetsJECUp.emplace_back(jetJECUpPt[i], jetJECUpEta[i], jetJECUpPhi[i],
+             jetJECUpBTag[i], jetJECUpFlavour[i]);
+        
+        for (int i = 0; i < jetJECDownSize; ++i)
+            jetsJECDown.emplace_back(jetJECDownPt[i], jetJECDownEta[i], jetJECDownPhi[i],
+             jetJECDownBTag[i], jetJECDownFlavour[i]);
+        
+        metJECUp.Set(metJECUpPt, metJECUpPhi);
+        metJECDown.Set(metJECDownPt, metJECDownPhi);
+    }
+    
     
     // Make sure vector of leptons and jets are ordered in pt
     sort(leptons.rbegin(), leptons.rend());
     sort(jets.rbegin(), jets.rend());
+    
+    if (isMC)
+    {
+        sort(jetsJECUp.rbegin(), jetsJECUp.rend());
+        sort(jetsJECDown.rbegin(), jetsJECDown.rend());
+    }
     
     
     // Calculate event weight
@@ -134,33 +157,56 @@ void Reader::GetTree(string const &name)
     }
     
     
+    // FIXME: For the time being treat all samples as simulation. With the new file it will be
+    //possible to guess from the tree structure
+    isMC = true;
+    
+    
     // Set event counters
     nEntries = curTree->GetEntries();
     curEntry = 0;
     
     
     // Set buffers to read the tree
-    curTree->SetBranchAddress("smalltree_nlepton", &lepSize);
-    curTree->SetBranchAddress("smalltree_lept_pt", lepPt);
-    curTree->SetBranchAddress("smalltree_lept_eta", lepEta);
-    curTree->SetBranchAddress("smalltree_lept_phi", lepPhi);
-    curTree->SetBranchAddress("smalltree_lept_iso", lepIso);
-    curTree->SetBranchAddress("smalltree_lept_flav", lepFlavour);
+    curTree->SetBranchAddress("nlepton", &lepSize);
+    curTree->SetBranchAddress("lept_pt", lepPt);
+    curTree->SetBranchAddress("lept_eta", lepEta);
+    curTree->SetBranchAddress("lept_phi", lepPhi);
+    curTree->SetBranchAddress("lept_iso", lepIso);
+    curTree->SetBranchAddress("lept_flav", lepFlavour);
     
-    curTree->SetBranchAddress("smalltree_njets", &jetSize);
-    curTree->SetBranchAddress("smalltree_jet_pt", jetPt);
-    curTree->SetBranchAddress("smalltree_jet_eta", jetEta);
-    curTree->SetBranchAddress("smalltree_jet_phi", jetPhi);
-    curTree->SetBranchAddress("smalltree_jet_btagdiscri", jetBTag);
-    curTree->SetBranchAddress("smalltree_jet_flav", jetFlavour);
+    curTree->SetBranchAddress("njets", &jetSize);
+    curTree->SetBranchAddress("jet_pt", jetPt);
+    curTree->SetBranchAddress("jet_eta", jetEta);
+    curTree->SetBranchAddress("jet_phi", jetPhi);
+    curTree->SetBranchAddress("jet_btagdiscri", jetBTag);
+    curTree->SetBranchAddress("jet_flav", jetFlavour);
     
-    curTree->SetBranchAddress("smalltree_met_pt", &metPt);
-    curTree->SetBranchAddress("smalltree_met_phi", &metPhi);
+    curTree->SetBranchAddress("met_pt", &metPt);
+    curTree->SetBranchAddress("met_phi", &metPhi);
     
-    curTree->SetBranchAddress("smalltree_evtweight", &rawWeight);
-    
-    
-    // FIXME: For the time being treat all samples as simulation. With the new file it will be
-    //possible to guess from the tree structure
-    isMC = true;
+    if (isMC)
+    {
+        curTree->SetBranchAddress("jesup_njets", &jetJECUpSize);
+        curTree->SetBranchAddress("jet_jesup_pt", jetJECUpPt);
+        curTree->SetBranchAddress("jet_jesup_eta", jetJECUpEta);
+        curTree->SetBranchAddress("jet_jesup_phi", jetJECUpPhi);
+        curTree->SetBranchAddress("jet_jesup_btagdiscri", jetJECUpBTag);
+        curTree->SetBranchAddress("jet_jesup_flav", jetJECUpFlavour);
+        
+        curTree->SetBranchAddress("jesdown_njets", &jetJECDownSize);
+        curTree->SetBranchAddress("jet_jesdown_pt", jetJECDownPt);
+        curTree->SetBranchAddress("jet_jesdown_eta", jetJECDownEta);
+        curTree->SetBranchAddress("jet_jesdown_phi", jetJECDownPhi);
+        curTree->SetBranchAddress("jet_jesdown_btagdiscri", jetJECDownBTag);
+        curTree->SetBranchAddress("jet_jesdown_flav", jetJECDownFlavour);
+        
+        curTree->SetBranchAddress("met_jesup_pt", &metJECUpPt);
+        curTree->SetBranchAddress("met_jesup_phi", &metJECUpPhi);
+        
+        curTree->SetBranchAddress("met_jesdown_pt", &metJECDownPt);
+        curTree->SetBranchAddress("met_jesdown_phi", &metJECDownPhi);
+        
+        curTree->SetBranchAddress("evtweight", &rawWeight);
+    }
 }
