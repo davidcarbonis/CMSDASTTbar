@@ -4,6 +4,8 @@ CFLAGS = -Wall -Wextra -Wno-unused-local-typedefs -std=c++11 $(INCLUDE) $(OPFLAG
 LDFLAGS = $(shell root-config --libs) -lTreePlayer -lHistPainter
 
 
+.PHONY: clean
+
 all: produceExampleHist
 
 produceExampleHist: produceExampleHist.o PhysicsObjects.o CSVReweighter.o Reader.o
@@ -11,3 +13,6 @@ produceExampleHist: produceExampleHist.o PhysicsObjects.o CSVReweighter.o Reader
 
 %.o: %.cpp
 	@ g++ $(CFLAGS) -c $+ -o $@
+
+clean:
+	@ rm *.o
