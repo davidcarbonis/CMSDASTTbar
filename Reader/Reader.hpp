@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PhysicsObjects.hpp>
+#include <Systematics.hpp>
 #include <CSVReweighter.hpp>
 
 #include <TFile.h>
@@ -61,6 +62,15 @@ public:
     void Rewind() noexcept;
     
     /**
+     * \brief Sets desired systematical variation
+     * 
+     * Depending on the type, the requested variation can affect results of many getters. The method
+     * can be called before as well as after an event has been read. It affects all subsequent calls
+     * to getters, in the current and following events.
+     */
+    void SetSystematics(SystType systType, SystDirection systDirection);
+    
+    /**
      * \brief Returns the collection of leptons in the current event
      * 
      * The collection is ordered in pt, in the decreasing order.
@@ -70,11 +80,16 @@ public:
     /**
      * \brief Returns the collection of jets in the current event
      * 
-     * The collection is ordered in pt, in the decreasing order.
+     * The collection is ordered in pt, in the decreasing order. If the JEC systematical variations
+     * have been requested, the appropriate jet collection is returned insted of the nominal one.
      */
     std::vector<Jet> const &GetJets() const noexcept;
     
-    /// Returns MET of the current event
+    /**
+     * \brief Returns MET of the current event
+     * 
+     * If the JEC systematical variations have been requested, the MET is altered accordingly.
+     */
     MET const &GetMET() const noexcept;
     
     /**
@@ -103,6 +118,9 @@ private:
     /// Names of trees to be read from the source file
     std::list<std::string> treeNames;
     
+    /// An object to perform CSV reweighting
+    CSVReweighter csvReweighter;
+    
     /// Iterator that points to the name of the current tree
     decltype(treeNames)::iterator curTreeNameIt;
     
@@ -114,6 +132,23 @@ private:
     
     /// Index of the current event in the current tree
     unsigned long curEntry;
+    
+    /// Flag that indicates if the current sample is simulation
+    bool isMC;
+    
+    /**
+     * \brief Type of systematical variation that is in effect currently
+     * 
+     * The data member is used for simulation only.
+     */
+    SystType curSystType;
+    
+    /**
+     * \brief Direction of systematical variation that is in effect currently
+     * 
+     * The data member is used for simulation only.
+     */
+    SystDirection curSystDirection;
     
     /// Size of buffers to read the source tree
     static unsigned const maxSize = 64;
@@ -137,12 +172,6 @@ private:
     
     /// Total weight of the event
     double weight;
-    
-    /// Flag that indicates if the current sample is simulation
-    bool isMC;
-    
-    /// An object to perform CSV reweighting
-    CSVReweighter csvReweighter;
     
     
     // Buffers to read the trees

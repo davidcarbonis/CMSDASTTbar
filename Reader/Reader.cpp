@@ -13,7 +13,8 @@ unsigned const Reader::maxSize;
 
 
 Reader::Reader(shared_ptr<TFile> &srcFile_, list<string> const &treeNames_, bool isMC_ /*= true*/):
-    srcFile(srcFile_), treeNames(treeNames_), curTreeNameIt(treeNames.begin()), isMC(isMC_)
+    srcFile(srcFile_), treeNames(treeNames_), curTreeNameIt(treeNames.begin()), isMC(isMC_),
+    curSystType(SystType::Nominal), curSystDirection(SystDirection::Up)
 {
     // Make sure the source file is a valid one
     if (not srcFile or srcFile->IsZombie())
@@ -94,8 +95,12 @@ bool Reader::ReadNextEvent()
     // Calculate event weight if the event is simulated
     if (isMC)
     {
+        // Raw weights stored in the trees inlcude effects of pile-up, lepton scale factors, and
+        //normalisation for the cross section and integrated luminosity
         weight = rawWeight;
         
+        
+        // Reweighting for the b-tagging scale factors
         for (auto const &j: jets)
         {
             double const perJetBTagWeight = csvReweighter.CalculateJetWeight(j);
@@ -117,6 +122,19 @@ void Reader::Rewind() noexcept
 }
 
 
+void Reader::SetSystematics(SystType systType, SystDirection systDirection)
+{
+    // Update information about requested systematics
+    curSystType = systType;
+    curSystDirection = systDirection;
+    
+    
+    // If the type is Nominal (i.e. no variation), only direction Up is allowed
+    if (curSystType == SystType::Nominal)
+        curSystDirection = SystDirection::Up;
+}
+
+
 vector<Lepton> const &Reader::GetLeptons() const noexcept
 {
     return leptons;
@@ -125,13 +143,29 @@ vector<Lepton> const &Reader::GetLeptons() const noexcept
 
 vector<Jet> const &Reader::GetJets() const noexcept
 {
-    return jets;
+    if (isMC and curSystType == SystType::JEC)
+    {
+        if (curSystDirection == SystDirection::Up)
+            return jetsJECUp;
+        else
+            return jetsJECDown;
+    }
+    else
+        return jets;
 }
 
 
 MET const &Reader::GetMET() const noexcept
 {
-    return met;
+    if (isMC and curSystType == SystType::JEC)
+    {
+        if (curSystDirection == SystDirection::Up)
+            return metJECUp;
+        else
+            return metJECDown;
+    }
+    else
+        return met;
 }
 
 
