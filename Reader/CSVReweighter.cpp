@@ -58,28 +58,28 @@ CSVReweighter::CSVReweighter()
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_JESUp").c_str())));
         weightsBottom[EncodeSyst(SystType::JEC, SystDirection::Down)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_JESDown").c_str())));
-        weightsBottom[EncodeSyst(SystType::PurityHF, SystDirection::Up)][iPt].reset(
+        weightsBottom[EncodeSyst(SystType::BTagPurityHF, SystDirection::Up)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_LFUp").c_str())));
-        weightsBottom[EncodeSyst(SystType::PurityHF, SystDirection::Down)][iPt].reset(
+        weightsBottom[EncodeSyst(SystType::BTagPurityHF, SystDirection::Down)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_LFDown").c_str())));
-        weightsBottom[EncodeSyst(SystType::StatHF1, SystDirection::Up)][iPt].reset(
+        weightsBottom[EncodeSyst(SystType::BTagStatHF1, SystDirection::Up)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats1Up").c_str())));
-        weightsBottom[EncodeSyst(SystType::StatHF1, SystDirection::Down)][iPt].reset(
+        weightsBottom[EncodeSyst(SystType::BTagStatHF1, SystDirection::Down)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats1Down").c_str())));
-        weightsBottom[EncodeSyst(SystType::StatHF2, SystDirection::Up)][iPt].reset(
+        weightsBottom[EncodeSyst(SystType::BTagStatHF2, SystDirection::Up)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats2Up").c_str())));
-        weightsBottom[EncodeSyst(SystType::StatHF2, SystDirection::Down)][iPt].reset(
+        weightsBottom[EncodeSyst(SystType::BTagStatHF2, SystDirection::Down)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats2Down").c_str())));
         
         weightsCharm[EncodeSyst(SystType::Nominal, SystDirection::Up)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str()).c_str())));
-        weightsCharm[EncodeSyst(SystType::CharmUnc1, SystDirection::Up)][iPt].reset(
+        weightsCharm[EncodeSyst(SystType::BTagCharmUnc1, SystDirection::Up)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Up").c_str())));
-        weightsCharm[EncodeSyst(SystType::CharmUnc1, SystDirection::Down)][iPt].reset(
+        weightsCharm[EncodeSyst(SystType::BTagCharmUnc1, SystDirection::Down)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Down").c_str())));
-        weightsCharm[EncodeSyst(SystType::CharmUnc2, SystDirection::Up)][iPt].reset(
+        weightsCharm[EncodeSyst(SystType::BTagCharmUnc2, SystDirection::Up)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Up").c_str())));
-        weightsCharm[EncodeSyst(SystType::CharmUnc2, SystDirection::Down)][iPt].reset(
+        weightsCharm[EncodeSyst(SystType::BTagCharmUnc2, SystDirection::Down)][iPt].reset(
          reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Down").c_str())));
     }
     
@@ -133,17 +133,17 @@ CSVReweighter::CSVReweighter()
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_JESUp").c_str())));
             weightsLight[EncodeSyst(SystType::JEC, SystDirection::Down)][iPt][iEta].reset(
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_JESDown").c_str())));
-            weightsLight[EncodeSyst(SystType::PurityLF, SystDirection::Up)][iPt][iEta].reset(
+            weightsLight[EncodeSyst(SystType::BTagPurityLF, SystDirection::Up)][iPt][iEta].reset(
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_HFUp").c_str())));
-            weightsLight[EncodeSyst(SystType::PurityLF, SystDirection::Down)][iPt][iEta].reset(
+            weightsLight[EncodeSyst(SystType::BTagPurityLF, SystDirection::Down)][iPt][iEta].reset(
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_HFDown").c_str())));
-            weightsLight[EncodeSyst(SystType::StatLF1, SystDirection::Up)][iPt][iEta].reset(
+            weightsLight[EncodeSyst(SystType::BTagStatLF1, SystDirection::Up)][iPt][iEta].reset(
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats1Up").c_str())));
-            weightsLight[EncodeSyst(SystType::StatLF1, SystDirection::Down)][iPt][iEta].reset(
+            weightsLight[EncodeSyst(SystType::BTagStatLF1, SystDirection::Down)][iPt][iEta].reset(
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats1Down").c_str())));
-            weightsLight[EncodeSyst(SystType::StatLF2, SystDirection::Up)][iPt][iEta].reset(
+            weightsLight[EncodeSyst(SystType::BTagStatLF2, SystDirection::Up)][iPt][iEta].reset(
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats2Up").c_str())));
-            weightsLight[EncodeSyst(SystType::StatLF2, SystDirection::Down)][iPt][iEta].reset(
+            weightsLight[EncodeSyst(SystType::BTagStatLF2, SystDirection::Down)][iPt][iEta].reset(
              reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats2Down").c_str())));
         }
     

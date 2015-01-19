@@ -1,6 +1,7 @@
 #pragma once
 
 #include <PhysicsObjects.hpp>
+#include <Systematics.hpp>
 
 #include <TH1D.h>
 
@@ -13,43 +14,22 @@
  * \brief Calculates per-jet CSV weight
  * 
  * The performs CSV reweighting following the recipe in [1]. It calculates only per-jet weights, and
- * the user should use them to calculate the per-event weight. Quite a number of systematical
- * variations are provided. They all should be considered statistically independent. More details
- * about the reweighting method and its systematics can be found in the supporting AN [2].
+ * the user should use them to calculate the per-event weight. A number of sources of systematics
+ * are supported. In addition to sources that are related to b-tagging only (their names in the
+ * SystType enumeration start with BTag prefix), the CSV weights are also affected by the JEC
+ * systematics. More details about the reweighting method and its systematics can be found in the
+ * supporting AN [2].
  * [1] https://twiki.cern.ch/twiki/bin/viewauth/CMS/BTagShapeCalibration
  * [2] http://cms.cern.ch/iCMS/jsp/db_notes/noteInfo.jsp?cmsnoteid=CMS%20AN-2013/130
  */
 class CSVReweighter
 {
-public:
-    /**
-     * \brief Supported types of systematical variations
-     * 
-     * They all are independent.
-     */
-    enum class SystType
-    {
-        Nominal,
-        JEC,
-        PurityHF,
-        PurityLF,
-        StatHF1,
-        StatHF2,
-        StatLF1,
-        StatLF2,
-        CharmUnc1,
-        CharmUnc2
-    };
-    
-    /// Directions of systematical variations
-    enum class SystDirection
-    {
-        Up,
-        Down
-    };
-    
 private:
-    /// Describes systematics code, which combines the type and the direction
+    /**
+     * \brief A compact representation of a systematical variation
+     * 
+     * It combines the type and the direction. The representation is used in the class internally.
+     */
     typedef unsigned SystCode;
     
 public:
@@ -67,9 +47,9 @@ public:
      * 
      * A systematical variation is applied if requested. It is described by the type of systematics
      * and the direction of the variation. If a mismatched variation is requested (e.g. a variation
-     * that makes sense for b-quark jets only while calculating the weight for a light-flavour jet),
-     * the nominal weight is calculated. If the type of systematics is Nominal, the direction is
-     * ignored.
+     * that makes sense for b-quark jets only while calculating the weight for a light-flavour jet)
+     * or a variation that is not relevant for b-tagging, the nominal weight is calculated. If the
+     * type of systematics is Nominal, the direction is ignored.
      */
     double CalculateJetWeight(Jet const &jet, SystType systType, SystDirection systDirection) const;
     
@@ -77,11 +57,7 @@ public:
     double CalculateJetWeight(Jet const &jet) const;
     
 private:
-    /**
-     * \brief Combines type of systematics and direction of the variation into a single code
-     * 
-     * This representation is used in the class internally
-     */
+    /// Combines type of systematics and direction of the variation into a single code
     static SystCode EncodeSyst(SystType systType, SystDirection systDirection);
     
 private:
