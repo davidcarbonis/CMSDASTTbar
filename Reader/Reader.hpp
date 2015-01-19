@@ -26,16 +26,18 @@ public:
      * \brief Constructor from a source file and names of trees to be read from it
      * 
      * The trees will be read one by one, in the specified order. An exception is thrown if the
-     * source file does not exist or is corrupted.
+     * source file does not exist or is corrupted. The flag isMC indicates if the sampe is a
+     * simulation.
      */
-    Reader(std::shared_ptr<TFile> &srcFile, std::list<std::string> const &treeNames);
+    Reader(std::shared_ptr<TFile> &srcFile, std::list<std::string> const &treeNames,
+     bool isMC = true);
     
     /**
      * \brief Constructor from a source file and name of a single tree
      * 
      * Internally calls the first constructor.
      */
-    Reader(std::shared_ptr<TFile> &srcFile, std::string const &treeName);
+    Reader(std::shared_ptr<TFile> &srcFile, std::string const &treeName, bool isMC = true);
     
     /// There is no construction without parameters
     Reader() = delete;

@@ -25,7 +25,7 @@ struct Group
     Group() = default;
     
     /// Constructor with explicit initialisation
-    Group(string const &name, initializer_list<string> const &treeNames);
+    Group(string const &name, initializer_list<string> const &treeNames, bool isMC = true);
     
     /// Move constructor
     Group(Group &&) = default;
@@ -35,11 +35,15 @@ struct Group
     
     /// Names of trees that contribute to this group
     list<string> treeNames;
+    
+    /// Flag to indicate MC simulation as opposed to data
+    bool isMC;
 };
 
 
-Group::Group(string const &name_, initializer_list<string> const &treeNames_):
-    name(name_), treeNames(treeNames_)
+Group::Group(string const &name_, initializer_list<string> const &treeNames_,
+ bool isMC_ /*= true*/):
+    name(name_), treeNames(treeNames_), isMC(isMC_)
 {}
 
 
@@ -60,7 +64,7 @@ int main()
     //to each group
     list<Group> groups;
     groups.emplace_back(Group("Data", {"SingleMuRun2012A", "SingleMuRun2012B", "SingleMuRun2012C",
-     "SingleMuRun2012D"}));
+     "SingleMuRun2012D"}, false));
     groups.emplace_back(Group("ttbar", {"TTJets"}));
     groups.emplace_back(Group("SingleTop", {"T_t-channel", "Tbar_t-channel", "T_tW-channel",
      "Tbar_tW-channel"}));
@@ -81,7 +85,7 @@ int main()
     for (auto const &group: groups)
     {
         // Create a reader for the current group
-        Reader reader(srcFile, group.treeNames);
+        Reader reader(srcFile, group.treeNames, group.isMC);
         
         
         // Create a histogram to be filled. It is named after the group

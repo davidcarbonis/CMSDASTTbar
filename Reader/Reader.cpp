@@ -12,8 +12,8 @@ using namespace std;
 unsigned const Reader::maxSize;
 
 
-Reader::Reader(shared_ptr<TFile> &srcFile_, list<string> const &treeNames_):
-    srcFile(srcFile_), treeNames(treeNames_), curTreeNameIt(treeNames.begin())
+Reader::Reader(shared_ptr<TFile> &srcFile_, list<string> const &treeNames_, bool isMC_ /*= true*/):
+    srcFile(srcFile_), treeNames(treeNames_), curTreeNameIt(treeNames.begin()), isMC(isMC_)
 {
     // Make sure the source file is a valid one
     if (not srcFile or srcFile->IsZombie())
@@ -25,8 +25,8 @@ Reader::Reader(shared_ptr<TFile> &srcFile_, list<string> const &treeNames_):
 }
 
 
-Reader::Reader(shared_ptr<TFile> &srcFile_, string const &treeName):
-    Reader(srcFile_, list<string>{treeName})
+Reader::Reader(shared_ptr<TFile> &srcFile_, string const &treeName, bool isMC_ /*= true*/):
+    Reader(srcFile_, list<string>{treeName}, isMC_)
 {}
 
 
@@ -161,11 +161,6 @@ void Reader::GetTree(string const &name)
         ost << "Cannot find tree \"" << name << "\" in file \"" << srcFile->GetTitle() << "\".";
         throw runtime_error(ost.str());
     }
-    
-    
-    // FIXME: For the time being treat all samples as simulation. With the new file it will be
-    //possible to guess from the tree structure
-    isMC = true;
     
     
     // Set event counters
