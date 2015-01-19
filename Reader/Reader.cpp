@@ -91,10 +91,11 @@ bool Reader::ReadNextEvent()
     }
     
     
-    // Calculate event weight
-    weight = rawWeight;
-    
+    // Calculate event weight if the event is simulated
     if (isMC)
+    {
+        weight = rawWeight;
+        
         for (auto const &j: jets)
         {
             double const perJetBTagWeight = csvReweighter.CalculateJetWeight(j);
@@ -102,6 +103,7 @@ bool Reader::ReadNextEvent()
             if (perJetBTagWeight != 0.)
                 weight *= perJetBTagWeight;
         }
+    }
     
     
     return true;
@@ -212,4 +214,8 @@ void Reader::GetTree(string const &name)
         
         curTree->SetBranchAddress("evtweight", &rawWeight);
     }
+    
+    
+    // Set the event weight for data (it will not be modified)
+    weight = 1.;
 }
