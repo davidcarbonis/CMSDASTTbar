@@ -84,6 +84,10 @@ int main()
     // Loop over the groups
     for (auto const &group: groups)
     {
+        // A bit of verbosity
+        cout << "Processing group \"" << group.name << "\"..." << endl;
+        
+        
         // Create a reader for the current group
         Reader reader(srcFile, group.treeNames, group.isMC);
         
@@ -140,6 +144,9 @@ int main()
         outFile.cd();
         histMtW.Write();
     }
+    
+    
+    cout << "Done. Results are saved in the file \"" << outFile.GetName() << "\".\n";
     
     
     return EXIT_SUCCESS;
