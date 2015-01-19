@@ -23,32 +23,34 @@ class CSVReweighter
 {
 public:
     /**
-     * \brief Supported systematical variations
+     * \brief Supported types of systematical variations
      * 
      * They all are independent.
      */
-    enum class Systematics
+    enum class SystType
     {
         Nominal,
-        JECUp,
-        JECDown,
-        PurityHFUp,
-        PurityHFDown,
-        PurityLFUp,
-        PurityLFDown,
-        StatHF1Up,
-        StatHF1Down,
-        StatHF2Up,
-        StatHF2Down,
-        StatLF1Up,
-        StatLF1Down,
-        StatLF2Up,
-        StatLF2Down,
-        CharmUnc1Up,
-        CharmUnc1Down,
-        CharmUnc2Up,
-        CharmUnc2Down
+        JEC,
+        PurityHF,
+        PurityLF,
+        StatHF1,
+        StatHF2,
+        StatLF1,
+        StatLF2,
+        CharmUnc1,
+        CharmUnc2
     };
+    
+    /// Directions of systematical variations
+    enum class SystDirection
+    {
+        Up,
+        Down
+    };
+    
+private:
+    /// Describes systematics code, which combines the type and the direction
+    typedef unsigned SystCode;
     
 public:
     /**
@@ -63,11 +65,24 @@ public:
     /**
      * \brief Calculates per-jet CSV weight
      * 
-     * A systematical variation is applied if requested. If a mismatched variation is requested
-     * (e.g. a variation that makes sense for b-quark jets only while calculating the weight for a
-     * light-flavour jet), the nominal weight is calculated.
+     * A systematical variation is applied if requested. It is described by the type of systematics
+     * and the direction of the variation. If a mismatched variation is requested (e.g. a variation
+     * that makes sense for b-quark jets only while calculating the weight for a light-flavour jet),
+     * the nominal weight is calculated. If the type of systematics is Nominal, the direction is
+     * ignored.
      */
-    double CalculateJetWeight(Jet const &jet, Systematics syst = Systematics::Nominal) const;
+    double CalculateJetWeight(Jet const &jet, SystType systType, SystDirection systDirection) const;
+    
+    /// A short-cut to calculate nominal per-jet CSV weight
+    double CalculateJetWeight(Jet const &jet) const;
+    
+private:
+    /**
+     * \brief Combines type of systematics and direction of the variation into a single code
+     * 
+     * This representation is used in the class internally
+     */
+    static SystCode EncodeSyst(SystType systType, SystDirection systDirection);
     
 private:
     /// Number of bins in pt in histograms for heavy-flavour jets
@@ -80,11 +95,11 @@ private:
     static unsigned const nEtaBinsLF = 3;
     
     /// Histograms with weights for b-quark jets
-    mutable std::map<Systematics, std::unique_ptr<TH1D>[nPtBinsHF]> weightsBottom;
+    mutable std::map<SystCode, std::unique_ptr<TH1D>[nPtBinsHF]> weightsBottom;
     
     /// Histograms with weights for c-quark jets
-    mutable std::map<Systematics, std::unique_ptr<TH1D>[nPtBinsHF]> weightsCharm;
+    mutable std::map<SystCode, std::unique_ptr<TH1D>[nPtBinsHF]> weightsCharm;
     
     /// Histograms with weights for light-flavour jets
-    mutable std::map<Systematics, std::unique_ptr<TH1D>[nPtBinsLF][nEtaBinsLF]> weightsLight;
+    mutable std::map<SystCode, std::unique_ptr<TH1D>[nPtBinsLF][nEtaBinsLF]> weightsLight;
 };

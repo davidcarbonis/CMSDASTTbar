@@ -52,35 +52,35 @@ CSVReweighter::CSVReweighter()
         ostringstream nameFragment;
         nameFragment << "csv_ratio_Pt" << iPt << "_Eta0_final";
         
-        weightsBottom[Systematics::Nominal][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get(nameFragment.str().c_str())));
-        weightsBottom[Systematics::JECUp][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_JESUp").c_str())));
-        weightsBottom[Systematics::JECDown][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_JESDown").c_str())));
-        weightsBottom[Systematics::PurityHFUp][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_LFUp").c_str())));
-        weightsBottom[Systematics::PurityHFDown][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_LFDown").c_str())));
-        weightsBottom[Systematics::StatHF1Up][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_Stats1Up").c_str())));
-        weightsBottom[Systematics::StatHF1Down][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_Stats1Down").c_str())));
-        weightsBottom[Systematics::StatHF2Up][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_Stats2Up").c_str())));
-        weightsBottom[Systematics::StatHF2Down][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((nameFragment.str() + "_Stats2Down").c_str())));
+        weightsBottom[EncodeSyst(SystType::Nominal, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get(nameFragment.str().c_str())));
+        weightsBottom[EncodeSyst(SystType::JEC, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_JESUp").c_str())));
+        weightsBottom[EncodeSyst(SystType::JEC, SystDirection::Down)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_JESDown").c_str())));
+        weightsBottom[EncodeSyst(SystType::PurityHF, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_LFUp").c_str())));
+        weightsBottom[EncodeSyst(SystType::PurityHF, SystDirection::Down)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_LFDown").c_str())));
+        weightsBottom[EncodeSyst(SystType::StatHF1, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats1Up").c_str())));
+        weightsBottom[EncodeSyst(SystType::StatHF1, SystDirection::Down)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats1Down").c_str())));
+        weightsBottom[EncodeSyst(SystType::StatHF2, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats2Up").c_str())));
+        weightsBottom[EncodeSyst(SystType::StatHF2, SystDirection::Down)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((nameFragment.str() + "_Stats2Down").c_str())));
         
-        weightsCharm[Systematics::Nominal][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((string("c_") + nameFragment.str()).c_str())));
-        weightsCharm[Systematics::CharmUnc1Up][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Up").c_str())));
-        weightsCharm[Systematics::CharmUnc1Down][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Down").c_str())));
-        weightsCharm[Systematics::CharmUnc2Up][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Up").c_str())));
-        weightsCharm[Systematics::CharmUnc2Down][iPt].reset(reinterpret_cast<TH1D *>(
-         dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Down").c_str())));
+        weightsCharm[EncodeSyst(SystType::Nominal, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str()).c_str())));
+        weightsCharm[EncodeSyst(SystType::CharmUnc1, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Up").c_str())));
+        weightsCharm[EncodeSyst(SystType::CharmUnc1, SystDirection::Down)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr1Down").c_str())));
+        weightsCharm[EncodeSyst(SystType::CharmUnc2, SystDirection::Up)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Up").c_str())));
+        weightsCharm[EncodeSyst(SystType::CharmUnc2, SystDirection::Down)][iPt].reset(
+         reinterpret_cast<TH1D *>(dataFileHF->Get((string("c_") + nameFragment.str() + "_cErr2Down").c_str())));
     }
     
     
@@ -127,24 +127,24 @@ CSVReweighter::CSVReweighter()
             ostringstream nameFragment;
             nameFragment << "csv_ratio_Pt" << iPt << "_Eta" << iEta << "_final";
             
-            weightsLight[Systematics::Nominal][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get(nameFragment.str().c_str())));
-            weightsLight[Systematics::JECUp][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_JESUp").c_str())));
-            weightsLight[Systematics::JECDown][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_JESDown").c_str())));
-            weightsLight[Systematics::PurityLFUp][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_HFUp").c_str())));
-            weightsLight[Systematics::PurityLFDown][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_HFDown").c_str())));
-            weightsLight[Systematics::StatLF1Up][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_Stats1Up").c_str())));
-            weightsLight[Systematics::StatLF1Down][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_Stats1Down").c_str())));
-            weightsLight[Systematics::StatLF2Up][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_Stats2Up").c_str())));
-            weightsLight[Systematics::StatLF2Down][iPt][iEta].reset(reinterpret_cast<TH1D *>(
-             dataFileLF->Get((nameFragment.str() + "_Stats2Down").c_str())));
+            weightsLight[EncodeSyst(SystType::Nominal, SystDirection::Up)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get(nameFragment.str().c_str())));
+            weightsLight[EncodeSyst(SystType::JEC, SystDirection::Up)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_JESUp").c_str())));
+            weightsLight[EncodeSyst(SystType::JEC, SystDirection::Down)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_JESDown").c_str())));
+            weightsLight[EncodeSyst(SystType::PurityLF, SystDirection::Up)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_HFUp").c_str())));
+            weightsLight[EncodeSyst(SystType::PurityLF, SystDirection::Down)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_HFDown").c_str())));
+            weightsLight[EncodeSyst(SystType::StatLF1, SystDirection::Up)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats1Up").c_str())));
+            weightsLight[EncodeSyst(SystType::StatLF1, SystDirection::Down)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats1Down").c_str())));
+            weightsLight[EncodeSyst(SystType::StatLF2, SystDirection::Up)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats2Up").c_str())));
+            weightsLight[EncodeSyst(SystType::StatLF2, SystDirection::Down)][iPt][iEta].reset(
+             reinterpret_cast<TH1D *>(dataFileLF->Get((nameFragment.str() + "_Stats2Down").c_str())));
         }
     
     
@@ -173,7 +173,7 @@ CSVReweighter::CSVReweighter()
 
 
 double CSVReweighter::CalculateJetWeight(Jet const &jet,
- Systematics syst /*= Systematics::Nominal*/) const
+ SystType systType, SystDirection systDirection) const
 {
     // Find pt and eta bins into which the given jet falls
     int iPt = -1, iEta = -1;
@@ -202,6 +202,14 @@ double CSVReweighter::CalculateJetWeight(Jet const &jet,
         return 1.;
     
     
+    // Encode the requested systematics. Not that if the type is Nominal, only Up variation is
+    //expected
+    if (systType == SystType::Nominal and systDirection == SystDirection::Down)
+        systDirection = SystDirection::Up;
+    
+    SystCode systCode = EncodeSyst(systType, systDirection);
+    
+    
     // Calculate the per-jet weight depending on the jet flavour
     double const csv = jet.BTag();
     
@@ -210,11 +218,11 @@ double CSVReweighter::CalculateJetWeight(Jet const &jet,
         case 5:  // b-quark jets
         {
             // Check for mismatched systematical variation
-            if (weightsBottom.find(syst) == weightsBottom.end())
-                syst = Systematics::Nominal;
+            if (weightsBottom.find(systCode) == weightsBottom.end())
+                systCode = EncodeSyst(SystType::Nominal, SystDirection::Up);
             
-            int const bin = (csv >= 0.) ? weightsBottom[syst][iPt]->FindFixBin(csv) : 1;
-            return weightsBottom[syst][iPt]->GetBinContent(bin);
+            int const bin = (csv >= 0.) ? weightsBottom[systCode][iPt]->FindFixBin(csv) : 1;
+            return weightsBottom[systCode][iPt]->GetBinContent(bin);
             
             break;
         }
@@ -222,11 +230,11 @@ double CSVReweighter::CalculateJetWeight(Jet const &jet,
         case 4:  // c-quark jets
         {
             // Check for mismatched systematical variation
-            if (weightsCharm.find(syst) == weightsCharm.end())
-                syst = Systematics::Nominal;
+            if (weightsCharm.find(systCode) == weightsCharm.end())
+                systCode = EncodeSyst(SystType::Nominal, SystDirection::Up);
             
-            int const bin = (csv >= 0.) ? weightsCharm[syst][iPt]->FindFixBin(csv) : 1;
-            return weightsCharm[syst][iPt]->GetBinContent(bin);
+            int const bin = (csv >= 0.) ? weightsCharm[systCode][iPt]->FindFixBin(csv) : 1;
+            return weightsCharm[systCode][iPt]->GetBinContent(bin);
             
             break;
         }
@@ -238,13 +246,25 @@ double CSVReweighter::CalculateJetWeight(Jet const &jet,
                 iPt = 3;
             
             // Check for mismatched systematical variation
-            if (weightsLight.find(syst) == weightsLight.end())
-                syst = Systematics::Nominal;
+            if (weightsLight.find(systCode) == weightsLight.end())
+                systCode = EncodeSyst(SystType::Nominal, SystDirection::Up);
             
-            int const bin = (csv >= 0.) ? weightsLight[syst][iPt][iEta]->FindFixBin(csv) : 1;
-            return weightsLight[syst][iPt][iEta]->GetBinContent(bin);
+            int const bin = (csv >= 0.) ? weightsLight[systCode][iPt][iEta]->FindFixBin(csv) : 1;
+            return weightsLight[systCode][iPt][iEta]->GetBinContent(bin);
             
             break;
         }
     }
+}
+
+
+double CSVReweighter::CalculateJetWeight(Jet const &jet) const
+{
+    return CalculateJetWeight(jet, SystType::Nominal, SystDirection::Up);
+}
+
+
+CSVReweighter::SystCode CSVReweighter::EncodeSyst(SystType systType, SystDirection systDirection)
+{
+    return 2 * unsigned(systType) + unsigned(systDirection);
 }
