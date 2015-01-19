@@ -139,6 +139,12 @@ double Reader::GetWeight() const noexcept
 }
 
 
+unsigned Reader::GetNumPV() const noexcept
+{
+    return nPV;
+}
+
+
 void Reader::GetTree(string const &name)
 {
     // Get the tree from the source file
@@ -184,6 +190,8 @@ void Reader::GetTree(string const &name)
     
     curTree->SetBranchAddress("met_pt", &metPt);
     curTree->SetBranchAddress("met_phi", &metPhi);
+    
+    curTree->SetBranchAddress("nvertex", &nPV);
     
     if (isMC)
     {

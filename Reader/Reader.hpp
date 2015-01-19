@@ -82,6 +82,9 @@ public:
      */
     double GetWeight() const noexcept;
     
+    /// Returns the number of reconstructed primary vertices in the current event
+    unsigned GetNumPV() const noexcept;
+    
 private:
     /**
      * \brief Gets a new tree from the source file and sets up buffers to read it
@@ -162,5 +165,6 @@ private:
     Float_t metJECUpPt, metJECUpPhi;
     Float_t metJECDownPt, metJECDownPhi;
     
+    Int_t nPV;
     Float_t rawWeight;
 };
