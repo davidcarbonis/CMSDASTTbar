@@ -15,10 +15,12 @@
 
 /**
  * \class Reader
- * \brief Reads the requested tree from the source file
+ * \brief Reads the requested tree(s) from the source file
  * 
- * Read all events in the tree and provides an access to basic properties of each event with the
- * help of dedicated getters.
+ * Reads all events in the tree(s) and provides an access to basic properties of each event with the
+ * help of dedicated getters. Allows to perform systematical variations, which can be requested via
+ * the SetSystematics method. When the requested systematical variation is changed, it affects
+ * results of all relevant getters.
  */
 class Reader
 {
@@ -95,9 +97,15 @@ public:
     /**
      * \brief Returns weight of the current event
      * 
-     * Needed for simulation only. Always 1. for data.
+     * Needed for simulation only, while it always equals 1. in case of data. Incorporates
+     * reweighting for cross section and target integrated luminosity, lepton ID scale factors,
+     * pile-up, and b-tagging. The weight can be affected by systematics.
+     * 
+     * When the method is called for the first time for an event, the weight is calculated and
+     * cached. Thus, the weight is not recalculated in subsequent calls for the same event, unless
+     * the user calls the SetSystematics method, which destroys the cache.
      */
-    double GetWeight() const noexcept;
+    double GetWeight() noexcept;
     
     /// Returns the number of reconstructed primary vertices in the current event
     unsigned GetNumPV() const noexcept;
@@ -172,6 +180,9 @@ private:
     
     /// Total weight of the event
     double weight;
+    
+    /// Indicates if the weight is up-to-date and should not be recalculated
+    bool weightCached;
     
     
     // Buffers to read the trees

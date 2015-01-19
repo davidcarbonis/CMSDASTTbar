@@ -92,24 +92,9 @@ bool Reader::ReadNextEvent()
     }
     
     
-    // Calculate event weight if the event is simulated
-    if (isMC)
-    {
-        // Raw weights stored in the trees inlcude effects of pile-up, lepton scale factors, and
-        //normalisation for the cross section and integrated luminosity
-        weight = rawWeight;
+    // Indicate that the stored event weight is no longer up-to-date
+    weightCached = false;
         
-        
-        // Reweighting for the b-tagging scale factors
-        for (auto const &j: jets)
-        {
-            double const perJetBTagWeight = csvReweighter.CalculateJetWeight(j);
-            
-            if (perJetBTagWeight != 0.)
-                weight *= perJetBTagWeight;
-        }
-    }
-    
     
     return true;
 }
@@ -132,6 +117,11 @@ void Reader::SetSystematics(SystType systType, SystDirection systDirection)
     // If the type is Nominal (i.e. no variation), only direction Up is allowed
     if (curSystType == SystType::Nominal)
         curSystDirection = SystDirection::Up;
+    
+    
+    // The stored weight might not be up-to-date anymore since it might be affected by the
+    //systematics
+    weightCached = false;
 }
 
 
@@ -169,8 +159,42 @@ MET const &Reader::GetMET() const noexcept
 }
 
 
-double Reader::GetWeight() const noexcept
+double Reader::GetWeight() noexcept
 {
+    // If the current sample is data, the answer is trivial
+    if (not isMC)
+        return 1.;
+    
+    
+    // Check if the weight is up-to-date
+    if (weightCached)
+        return weight;
+    
+    
+    // Recalculate the weight. Note that if the workflow reaches this point, the current sample is
+    //simulation
+    
+    // Raw weights stored in the trees inlcude effects of pile-up, lepton scale factors, and
+    //normalisation for the cross section and integrated luminosity
+    weight = rawWeight;
+    
+    
+    // Reweighting for the b-tagging scale factors
+    for (auto const &j: jets)
+    {
+        double const perJetBTagWeight =
+         csvReweighter.CalculateJetWeight(j, curSystType, curSystDirection);
+        
+        if (perJetBTagWeight != 0.)
+            weight *= perJetBTagWeight;
+    }
+    
+    
+    // The weight is now cached
+    weightCached = true;
+    
+    
+    // Return the weight
     return weight;
 }
 
