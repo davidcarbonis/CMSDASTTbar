@@ -209,9 +209,7 @@ void Reader::GetTree(string const &name)
 {
     // Get the tree from the source file
     //curTree.reset(dynamic_cast<TTree *>(srcFile->Get(name.c_str())));
-    curTree.reset(static_cast<TTree *>(srcFile->Get(name.c_str())));
-    //^ Apparently, my copy of ROOT is compiled w/o RTTI support, so dynamic_cast fails. Opt for the
-    //unsafe cast for the time being
+    curTree.reset(dynamic_cast<TTree *>(srcFile->Get(name.c_str())));
     
     
     // Make sure the tree exists
