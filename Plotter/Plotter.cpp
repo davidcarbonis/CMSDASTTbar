@@ -2,6 +2,7 @@
 
 #include <THStack.h>
 #include <TCanvas.h>
+#include <TLegend.h>
 #include <TStyle.h>
 #include <TGaxis.h>
 
@@ -114,17 +115,35 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         mcStack.Add(h->get(), "hist");
     
     
-    // Create a canvas
+    // Create a legend
+    TLegend legend(0.86, 0.9 - 0.04 * (1 + mcHists.size()), 0.99, 0.9);
+    legend.SetFillColor(kWhite);
+    legend.SetTextFont(42);
+    legend.SetTextSize(0.03);
+    
+    legend.AddEntry(dataHist.get(), dataHist->GetTitle(), "p");
+    
+    for (auto const &h: mcHists)
+        legend.AddEntry(h.get(), h->GetTitle(), "f");
+    
+    
+    // Create a canvas and a pad to draw in
     TCanvas canvas("canvas", "", 1500, 1000);
-    canvas.SetTicks();
+    
+    TPad drawPad("drawPad", "", 0., 0., 0.94, 1.);
+    drawPad.SetTicks();
+    drawPad.Draw();
     
     
-    // Draw the MC stack
+    // Draw the MC stack and the data histogram
+    drawPad.cd();
     mcStack.Draw();
-    
-    
-    // Draw the data histogram
     dataHist->Draw("p0 e1 same");
+    
+    
+    // Draw the legend
+    canvas.cd();
+    legend.Draw();
     
     
     // Update the maximum
