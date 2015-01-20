@@ -16,10 +16,10 @@
   //---------------------------
   //define list of data samples 
   std::vector<TString> dataSample_list;
-  dataSample_list.push_back("NTuple_53X_SingleMuRun2012A");	
-  dataSample_list.push_back("NTuple_53X_SingleMuRun2012B");	
-  dataSample_list.push_back("NTuple_53X_SingleMuRun2012C");	
-  dataSample_list.push_back("NTuple_53X_SingleMuRun2012D");	
+  dataSample_list.push_back("SingleMuRun2012A");	
+  dataSample_list.push_back("SingleMuRun2012B");	
+  dataSample_list.push_back("SingleMuRun2012C");	
+  dataSample_list.push_back("SingleMuRun2012D");	
   
   //------------------------------------
   //define list of data-driven templates
@@ -30,29 +30,25 @@
   std::vector<TString> mcSample_list;
   std::vector<int> colorVector;
   
-  mcSample_list.push_back("NTuple_53X_TTJetsMadgraphZ2");     colorVector.push_back(kRed+1);
-  //mcSample_list.push_back("NTuple_53X_TTWJets_8TeVmadgraph");     colorVector.push_back(kRed+3);
-  //mcSample_list.push_back("NTuple_53X_TTZJets_8TeVmadgraph_v2");     colorVector.push_back(kRed+3);
-  //mcSample_list.push_back("NTuple_53X_TZJetsTo3LNuB");     colorVector.push_back(kMagenta);
-  mcSample_list.push_back("NTuple_53X_WJetsToLNu");     colorVector.push_back(kGreen+2);
-  mcSample_list.push_back("NTuple_53X_DYJetsToLL_M-10To50");     colorVector.push_back(kAzure-2);
-  mcSample_list.push_back("NTuple_53X_DYJetsToLL_M-50");     colorVector.push_back(kAzure-2);
-  mcSample_list.push_back("NTuple_53X_T_s-channel");     colorVector.push_back(kRed+2);
-  mcSample_list.push_back("NTuple_53X_T_t-channel");     colorVector.push_back(kRed+2);
-  mcSample_list.push_back("NTuple_53X_T_tW-channel");     colorVector.push_back(kRed+2);
-  mcSample_list.push_back("NTuple_53X_Tbar_t-channel");     colorVector.push_back(kRed+2);
-  mcSample_list.push_back("NTuple_53X_Tbar_tW-channel");     colorVector.push_back(kRed+2);
-  //mcSample_list.push_back("NTuple_53X_Tbar_s-channel");     colorVector.push_back();
-  mcSample_list.push_back("NTuple_53X_WZJetsIncl");     colorVector.push_back(13);
-  mcSample_list.push_back("NTuple_53X_WWJetsIncl");     colorVector.push_back(13);
-  mcSample_list.push_back("NTuple_53X_ZZJetsIncl");     colorVector.push_back(13);
+  mcSample_list.push_back("TTJets");                          colorVector.push_back(kRed+1);
+  mcSample_list.push_back("WJetsToLNu");                      colorVector.push_back(kGreen+2);
+  mcSample_list.push_back("DYJetsToLL_M-10To50");             colorVector.push_back(kAzure-2);
+  mcSample_list.push_back("DYJetsToLL_M-50");                 colorVector.push_back(kAzure-2);
+  mcSample_list.push_back("T_s-channel");                     colorVector.push_back(kRed+2);
+  mcSample_list.push_back("T_t-channel");                     colorVector.push_back(kRed+2);
+  mcSample_list.push_back("T_tW-channel");                    colorVector.push_back(kRed+2);
+  mcSample_list.push_back("Tbar_t-channel");                  colorVector.push_back(kRed+2);
+  mcSample_list.push_back("Tbar_tW-channel");                 colorVector.push_back(kRed+2);
+  mcSample_list.push_back("WZJetsIncl");                      colorVector.push_back(13);
+  mcSample_list.push_back("WWJetsIncl");                      colorVector.push_back(13);
+  mcSample_list.push_back("ZZJetsIncl");                      colorVector.push_back(13);
   mcSample_list.push_back("QCD_Pt-20to30_MuEnrichedPt5");     colorVector.push_back(kYellow+1);
   mcSample_list.push_back("QCD_Pt-30to50_MuEnrichedPt5");     colorVector.push_back(kYellow+1);
   mcSample_list.push_back("QCD_Pt-50to80_MuEnrichedPt5");     colorVector.push_back(kYellow+1);
-  mcSample_list.push_back("QCD_Pt-80to120_MuEnrichedPt5");     colorVector.push_back(kYellow+1);
-  mcSample_list.push_back("QCD_Pt-120to170_MuEnrichedPt5");     colorVector.push_back(kYellow+1);
-  //mcSample_list.push_back("QCD_Pt-170to300_MuEnrichedPt");     colorVector.push_back(kYellow+1);
-  mcSample_list.push_back("QCD_Pt-300to470_MuEnrichedPt5");     colorVector.push_back(kYellow+1);
+  mcSample_list.push_back("QCD_Pt-80to120_MuEnrichedPt5");    colorVector.push_back(kYellow+1);
+  mcSample_list.push_back("QCD_Pt-120to170_MuEnrichedPt5");   colorVector.push_back(kYellow+1);
+  mcSample_list.push_back("QCD_Pt-170to300_MuEnrichedPt");    colorVector.push_back(kYellow+1);
+  mcSample_list.push_back("QCD_Pt-300to470_MuEnrichedPt5");   colorVector.push_back(kYellow+1);
 
   
   

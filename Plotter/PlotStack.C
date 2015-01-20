@@ -34,7 +34,8 @@ bool PlotStack(TString varname, TString namechan, TString selection, bool setlog
   
   TString filename;
   
-  filename = "../Output/histofile_merged.root";
+  filename = "/data/shared/Long_Exercise_TTbar/mujets_v3.root";  // CMS DAS machines
+  //filename = "/afs/cern.ch/work/j/jandrea/public/proof_merged.root";  // AFS
               
   
   Int_t stati=0;
@@ -419,12 +420,11 @@ bool PlotStack(TString varname, TString namechan, TString selection, bool setlog
   
   qw->AddEntry(histo_data,         "Data" ,                "ep");
   for(unsigned int i=0; i<mcSample_list.size(); i++){
-    if(mcSample_list[i] == "NTuple_53X_TTJetsMadgraphZ2"        ) qw->AddEntry( histo_mcSamples[0],	"t#bar{t}"	 ,"f");
-    if(mcSample_list[i] == "NTuple_53X_T_s-channel" ) qw->AddEntry( histo_mcSamples[6],	"single top"	 ,"f");
-    if(mcSample_list[i] == "NTuple_53X_TTWJets_8TeVmadgraph"    ) qw->AddEntry( histo_mcSamples[1],	"t#bar{t}V"	 ,"f");
-    if(mcSample_list[i] == "NTuple_53X_DYJetsToLL_M-50"         ) qw->AddEntry( histo_mcSamples[4],	"DY"		 ,"f");
-    if(mcSample_list[i] == "NTuple_53X_WJetsToLNu"              ) qw->AddEntry( histo_mcSamples[3],	"W+jets"	 ,"f");
-    if(mcSample_list[i] == "NTuple_53X_WWJetsIncl"              ) qw->AddEntry( histo_mcSamples[11],	"VV"	         ,"f");
+    if(mcSample_list[i] == "TTJets"        ) qw->AddEntry( histo_mcSamples[0],	"t#bar{t}"	 ,"f");
+    if(mcSample_list[i] == "T_s-channel" ) qw->AddEntry( histo_mcSamples[6],	"single top"	 ,"f");
+    if(mcSample_list[i] == "DYJetsToLL_M-50"         ) qw->AddEntry( histo_mcSamples[4],	"DY"		 ,"f");
+    if(mcSample_list[i] == "WJetsToLNu"              ) qw->AddEntry( histo_mcSamples[3],	"W+jets"	 ,"f");
+    if(mcSample_list[i] == "WWJetsIncl"              ) qw->AddEntry( histo_mcSamples[11],	"VV"	         ,"f");
   }
   
   qw->Draw();
