@@ -110,6 +110,15 @@ public:
     /// Returns the number of reconstructed primary vertices in the current event
     unsigned GetNumPV() const noexcept;
     
+    /**
+     * \brief Switches reweighting for b-tagging on or off
+     * 
+     * If the reweighting is switched off, the b-tagging weights are not accounted in the result of
+     * GetWeight. The method is expected to be used for debugging only. By default the b-tagging
+     * reweighting is enabled.
+     */
+    void SwitchBTagReweighting(bool on = true);
+    
 private:
     /**
      * \brief Gets a new tree from the source file and sets up buffers to read it
@@ -183,6 +192,13 @@ private:
     
     /// Indicates if the weight is up-to-date and should not be recalculated
     bool weightCached;
+    
+    /**
+     * \brief Flag showing if the reweighting for b-tagging should be applied
+     * 
+     * Needed for debug purposes only.
+     */
+    bool applyBTagReweighting;
     
     
     // Buffers to read the trees

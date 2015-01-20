@@ -14,7 +14,8 @@ unsigned const Reader::maxSize;
 
 Reader::Reader(shared_ptr<TFile> &srcFile_, list<string> const &treeNames_, bool isMC_ /*= true*/):
     srcFile(srcFile_), treeNames(treeNames_), curTreeNameIt(treeNames.begin()), isMC(isMC_),
-    curSystType(SystType::Nominal), curSystDirection(SystDirection::Up)
+    curSystType(SystType::Nominal), curSystDirection(SystDirection::Up),
+    applyBTagReweighting(true)
 {
     // Make sure the source file is a valid one
     if (not srcFile or srcFile->IsZombie())
@@ -180,14 +181,15 @@ double Reader::GetWeight() noexcept
     
     
     // Reweighting for the b-tagging scale factors
-    for (auto const &j: jets)
-    {
-        double const perJetBTagWeight =
-         csvReweighter.CalculateJetWeight(j, curSystType, curSystDirection);
-        
-        if (perJetBTagWeight != 0.)
-            weight *= perJetBTagWeight;
-    }
+    if (applyBTagReweighting)
+        for (auto const &j: jets)
+        {
+            double const perJetBTagWeight =
+             csvReweighter.CalculateJetWeight(j, curSystType, curSystDirection);
+            
+            if (perJetBTagWeight != 0.)
+                weight *= perJetBTagWeight;
+        }
     
     
     // The weight is now cached
@@ -202,6 +204,12 @@ double Reader::GetWeight() noexcept
 unsigned Reader::GetNumPV() const noexcept
 {
     return nPV;
+}
+
+
+void Reader::SwitchBTagReweighting(bool on /*= true*/)
+{
+    applyBTagReweighting = on;
 }
 
 
