@@ -26,7 +26,13 @@ The source trees are pretty large, and the execution takes several minutes.
 
 ## Plotter
 
-Exploits histograms produced by the Reader to plot a stacked distribution of all simulated processes and compare it against data.
+The module provides a C++ class to build a stacked distribution of simulated processes and compare it against data. It starts from a ROOT file that containst a set of histograms, with a structure similar to the file produced by the `Reader/produceExampleHist` program. An example program to plot a distribution can be compiled and executed with the following commands:
+```
+cd Plotter/
+ln -s ../Reader/MtW.root  # The output file produced by the produceExampleHist program
+make
+./produceExamplePlot
+```
 
 
 ## Fit
