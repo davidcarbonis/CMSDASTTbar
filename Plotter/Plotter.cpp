@@ -97,7 +97,7 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     for (auto &h: mcHists)
     {
         h->SetLineColor(kBlack);
-        h->SetLineWidth(2);
+        h->SetLineWidth(1);
     }
     
     
