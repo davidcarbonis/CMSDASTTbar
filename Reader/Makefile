@@ -15,4 +15,4 @@ produceExampleHist: produceExampleHist.o PhysicsObjects.o CSVReweighter.o Reader
 	@ g++ $(CFLAGS) -c $+ -o $@
 
 clean:
-	@ rm *.o
+	@ rm -f *.o

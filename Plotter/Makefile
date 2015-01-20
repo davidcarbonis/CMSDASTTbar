@@ -15,4 +15,4 @@ produceExamplePlot: produceExamplePlot.o Plotter.o
 	@ g++ $(CFLAGS) -c $+ -o $@
 
 clean:
-	@ rm *.o
+	@ rm -f *.o
