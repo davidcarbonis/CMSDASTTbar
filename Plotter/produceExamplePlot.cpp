@@ -13,7 +13,7 @@ int main()
     plotter.AddMCHist("ttbar", kOrange + 1, " t#bar{t} ");
     plotter.AddMCHist("SingleTop", kRed + 1, " t ");
     plotter.AddMCHist("Wjets", kGreen + 1, " W+jets ");
-    plotter.AddMCHist("VV", kBlue, " VV ");
+    plotter.AddMCHist("VV", kCyan, " VV ");
     plotter.AddMCHist("DrellYan", kAzure, " Drell-Yan ");
     plotter.AddMCHist("QCD", kGray, " QCD ");
     
