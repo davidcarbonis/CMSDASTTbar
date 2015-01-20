@@ -21,8 +21,7 @@ Plotter::Plotter(string const &srcFileName):
 void Plotter::AddDataHist(string const &name, string const &legendLabel)
 {
     // Get the histogram from the file
-    TH1 *hist = reinterpret_cast<TH1 *>(srcFile->Get(name.c_str()));
-    // TODO: Change to dynamic_cast
+    TH1 *hist = dynamic_cast<TH1 *>(srcFile->Get(name.c_str()));
     
     
     // Check if such histogram exists
@@ -51,8 +50,7 @@ void Plotter::AddDataHist(string const &name, string const &legendLabel)
 void Plotter::AddMCHist(string const &name, Color_t colour, string const &legendLabel)
 {
     // Get the histogram from the file
-    TH1 *hist = reinterpret_cast<TH1 *>(srcFile->Get(name.c_str()));
-    // TODO: Change to dynamic_cast
+    TH1 *hist = dynamic_cast<TH1 *>(srcFile->Get(name.c_str()));
     
     
     // Check if such histogram exists
