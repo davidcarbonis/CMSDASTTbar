@@ -2,11 +2,12 @@
 
 This repository contains code for the long exercise on ttbar at the CMS data analysis school in Bari in 2015. The code is organised into three independent modules described in further details below.
 
-To get started, initialise a read-only copy of the repository and set up the environment:
+To get started, initialise a read-only copy of the repository, checkout the recommended tag, and set up the environment:
 ```
 git clone https://github.com/andrey-popov/CMSDASTTbar.git
 cd CMSDASTTbar/
-. env.sh
+git checkout 1.0
+source env.sh
 ```
 The environment should be set up each time you log in.
 
