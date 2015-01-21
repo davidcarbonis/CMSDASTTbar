@@ -10,7 +10,9 @@
 
 /**
  * \class Plotter
- * \brief Plots data and MC expectations using histograms produced by the reader
+ * \brief Plots data and MC expectations using histograms produced by the Reader
+ * 
+ * Simulated processes are drawn in a stacked plot. The data histogram is optional.
  */
 class Plotter
 {

@@ -85,15 +85,16 @@ void Plotter::AddMCHist(string const &name, Color_t colour, string const &legend
 void Plotter::Plot(string const &figureTitle, string const &outFileName)
 {
     // Make sure the histograms exist
-    if (not dataHist)
-        throw runtime_error("Data histogram has not been provided.");
+    // if (not dataHist)
+    //     throw runtime_error("Data histogram has not been provided.");
     
     if (mcHists.size() == 0)
         throw runtime_error("No MC histograms have beed provided.");
     
     
     // Set decoration for all histograms
-    dataHist->SetMarkerStyle(20);
+    if (dataHist)
+        dataHist->SetMarkerStyle(20);
     
     for (auto &h: mcHists)
     {
@@ -116,12 +117,13 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     
     
     // Create a legend
-    TLegend legend(0.86, 0.9 - 0.04 * (1 + mcHists.size()), 0.99, 0.9);
+    TLegend legend(0.86, 0.9 - 0.04 * (mcHists.size() + ((dataHist) ? 1 : 0)), 0.99, 0.9);
     legend.SetFillColor(kWhite);
     legend.SetTextFont(42);
     legend.SetTextSize(0.03);
     
-    legend.AddEntry(dataHist.get(), dataHist->GetTitle(), "p");
+    if (dataHist)
+        legend.AddEntry(dataHist.get(), dataHist->GetTitle(), "p");
     
     for (auto const &h: mcHists)
         legend.AddEntry(h.get(), h->GetTitle(), "f");
@@ -138,7 +140,9 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     // Draw the MC stack and the data histogram
     drawPad.cd();
     mcStack.Draw();
-    dataHist->Draw("p0 e1 same");
+    
+    if (dataHist)
+        dataHist->Draw("p0 e1 same");
     
     
     // Draw the legend
@@ -147,9 +151,12 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     
     
     // Update the maximum
-    double const histMax = 1.1 * max(mcStack.GetMaximum(), dataHist->GetMaximum());
-    mcStack.SetMaximum(histMax);
-    dataHist->SetMaximum(histMax);
+    if (dataHist)
+    {
+        double const histMax = 1.1 * max(mcStack.GetMaximum(), dataHist->GetMaximum());
+        mcStack.SetMaximum(histMax);
+        dataHist->SetMaximum(histMax);
+    }
     
     
     // Save the picture
