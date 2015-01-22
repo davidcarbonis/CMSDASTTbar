@@ -75,15 +75,15 @@ Lepton::Lepton(int flavour_, double pt, double eta, double phi, double isolation
     switch (abs(flavour))
     {
         case 11:  // electron
-            mass = 0.511;
+            mass = 0.511e-3;
             break;
         
         case 13:  // muon
-            mass = 105.7;
+            mass = 105.7e-3;
             break;
         
         case 15:  // tau-lepton
-            mass = 1776.8;
+            mass = 1776.8e-3;
             break;
     }
     
