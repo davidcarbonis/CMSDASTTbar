@@ -100,7 +100,7 @@ int main()
         
         // The histogram will be filled with weighted events. Indicate that the weight should be
         //accounted in bin uncertainties
-        histMtW->Sumw2();
+        histMtW.Sumw2();
         
         
         // Loop over all events in the current group of processes
