@@ -259,6 +259,8 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         yAxis->SetNdivisions(405);
         yAxis->CenterTitle();
         yAxis->SetTitleOffset(0.5);
+        xAxis->SetTickLength(xAxis->GetTickLength() * (1. - 2. * margin - bottomSpacing) /
+         bottomSpacing);
         
         
         // Alter the y axis so that its labels do not overlap with the ones of the stacked plot.
