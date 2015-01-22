@@ -1,5 +1,5 @@
 #include <Reader.hpp>
-
+#include <CalculatePzNu.hpp>
 #include <TFile.h>
 #include <TH1D.h>
 
@@ -191,7 +191,7 @@ int main()
 
 	    //W from lepton channel
 	    TLorentzVector WLepton;
-	    WLepton = met.P4() + l.P4();
+	    WLepton = Nu4Momentum();
 
 	    double massTop1, massTop2;
 	    double mtWHad1, mtWHad2;
