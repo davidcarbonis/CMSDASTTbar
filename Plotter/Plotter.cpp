@@ -15,7 +15,7 @@ using namespace std;
 
 Plotter::Plotter(string const &srcFileName):
     srcFile(TFile::Open(srcFileName.c_str())),
-    plotResiduals(true)
+    plotResiduals(false)
 {}
 
 
@@ -85,10 +85,11 @@ void Plotter::AddMCHist(string const &name, Color_t colour, string const &legend
 
 void Plotter::Plot(string const &figureTitle, string const &outFileName)
 {
-    // Make sure the histograms exist
-    // if (not dataHist)
-    //     throw runtime_error("Data histogram has not been provided.");
+    // Is residuals have been requested, make sure the data histogram exists
+    if (not dataHist and plotResiduals)
+        throw runtime_error("Data histogram must provided to plot the residuals.");
     
+    // Check if there is at least one MC histogram
     if (mcHists.size() == 0)
         throw runtime_error("No MC histograms have beed provided.");
     
@@ -283,4 +284,10 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     // Save the picture
     for (auto const &fileType: {"png", "pdf", "C"})
         canvas.Print((outFileName + "." + fileType).c_str());
+}
+
+
+void Plotter::SwitchResiduals(bool on /*= true*/)
+{
+    plotResiduals = on;
 }
