@@ -53,6 +53,14 @@ public:
      */
     void Plot(std::string const &figureTitle, std::string const &outFileName);
     
+    /**
+     * \brief Adds or removes the residuals plot
+     * 
+     * The plot is not produced by default. It cannot be created if the data histogram is not
+     * available.
+     */
+    void SwitchResiduals(bool on = true);
+    
 private:
     /// ROOT file that contains histograms to be plotted
     std::unique_ptr<TFile> srcFile;
@@ -62,4 +70,7 @@ private:
     
     /// Histograms for simulation
     std::vector<std::unique_ptr<TH1>> mcHists;
+    
+    /// Indicates if the data/MC residuals should be plotted
+    bool plotResiduals;
 };
