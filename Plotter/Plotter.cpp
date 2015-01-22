@@ -109,6 +109,7 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     gStyle->SetErrorX(0.);
     gStyle->SetHistMinimumZero(kTRUE);
     gStyle->SetOptStat(0);
+    gStyle->SetStripDecimals(kFALSE);
     TGaxis::SetMaxDigits(3);
     
     
@@ -224,11 +225,38 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         residualsPad->Draw();
         
         
+        // Extract the label of the x axis of the MC stacked plot
+        auto const pos1 = figureTitle.find_first_of(';');
+        auto const pos2 = figureTitle.find_first_of(';', pos1 + 1);
+        string const xAxisTitle(figureTitle.substr(pos1 + 1, pos2 - pos1));
+        
+        
+        // Reset the title of the residuals histogram. It gets axis titles only
+        residualsHist->SetTitle((string(";") + xAxisTitle + ";#frac{Data-MC}{MC}").c_str());
+        
+        
         // Decoration of the residuals histogram
         residualsHist->SetMinimum(-0.2);
         residualsHist->SetMaximum(0.2);
         
         residualsHist->SetMarkerStyle(20);
+        residualsHist->SetLineColor(kBlack);
+        
+        TAxis *xAxis = residualsHist->GetXaxis();
+        TAxis *yAxis = residualsHist->GetYaxis();
+        
+        xAxis->SetTitleSize(mcStack.GetXaxis()->GetTitleSize() *
+         mainPad.GetHNDC() / residualsPad->GetHNDC());
+        xAxis->SetLabelSize(mcStack.GetXaxis()->GetLabelSize() *
+         mainPad.GetHNDC() / residualsPad->GetHNDC());
+        yAxis->SetTitleSize(mcStack.GetXaxis()->GetTitleSize() *
+         mainPad.GetHNDC() / residualsPad->GetHNDC());
+        yAxis->SetLabelSize(mcStack.GetXaxis()->GetLabelSize() *
+         mainPad.GetHNDC() / residualsPad->GetHNDC());
+        
+        yAxis->SetNdivisions(405);
+        yAxis->CenterTitle();
+        yAxis->SetTitleOffset(1.5);
         
         
         // Draw the residuals histogram
