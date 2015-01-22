@@ -66,18 +66,13 @@ int main()
     //Define here what processes (what trees) are grouped together and assign some meaningful name
     //to each group
     list<Group> groups;
-    groups.emplace_back(Group("Data", {"SingleMuRun2012A", "SingleMuRun2012B", "SingleMuRun2012C",
-     "SingleMuRun2012D"}, false));
+    //    groups.emplace_back(Group("Data", {"SingleMuRun2012A", "SingleMuRun2012B", "SingleMuRun2012C", "SingleMuRun2012D"}, false));
     groups.emplace_back(Group("ttbar", {"TTJets"}));
-    groups.emplace_back(Group("SingleTop", {"T_t-channel", "Tbar_t-channel", "T_tW-channel",
-     "Tbar_tW-channel"}));
-    groups.emplace_back(Group("Wjets", {"W1JetToLNu", "W2JetsToLNu", "W3JetsToLNu",
-     "W4JetsToLNu"}));
-    groups.emplace_back(Group("VV", {"WWJetsIncl", "WZJetsIncl", "ZZJetsIncl"}));
-    groups.emplace_back(Group("DrellYan", {"DYJetsToLL_M-10To50", "DYJetsToLL_M-50"}));
-    groups.emplace_back(Group("QCD", {"QCD_Pt-20to30_MuEnrichedPt5", "QCD_Pt-30to50_MuEnrichedPt5",
-     "QCD_Pt-50to80_MuEnrichedPt5", "QCD_Pt-80to120_MuEnrichedPt5", "QCD_Pt-120to170_MuEnrichedPt5",
-     "QCD_Pt-170to300_MuEnrichedPt5", "QCD_Pt-300to470_MuEnrichedPt5"}));
+//    groups.emplace_back(Group("SingleTop", {"T_t-channel", "Tbar_t-channel", "T_tW-channel", "Tbar_tW-channel"}));
+//    groups.emplace_back(Group("Wjets", {"W1JetToLNu", "W2JetsToLNu", "W3JetsToLNu", "W4JetsToLNu"}));
+//    groups.emplace_back(Group("VV", {"WWJetsIncl", "WZJetsIncl", "ZZJetsIncl"}));
+//    groups.emplace_back(Group("DrellYan", {"DYJetsToLL_M-10To50", "DYJetsToLL_M-50"}));
+//    groups.emplace_back(Group("QCD", {"QCD_Pt-20to30_MuEnrichedPt5", "QCD_Pt-30to50_MuEnrichedPt5", "QCD_Pt-50to80_MuEnrichedPt5", "QCD_Pt-80to120_MuEnrichedPt5", "QCD_Pt-120to170_MuEnrichedPt5", "QCD_Pt-170to300_MuEnrichedPt5", "QCD_Pt-300to470_MuEnrichedPt5"}));
     
     
     // Create an output file to store the histograms that will be created
@@ -161,7 +156,8 @@ int main()
             MET const &met = reader.GetMET();
             double const MtW = sqrt(pow(l.Pt() + met.Pt(), 2) -
              pow(l.P4().Px() + met.P4().Px(), 2) - pow(l.P4().Py() + met.P4().Py(), 2));
-                        
+            if (MtW < 50.) continue; // MtW cut from group 1
+
             // Fill the histogram. Note that simulated events are weighted
             histMtW.Fill(MtW, reader.GetWeight());
 
@@ -169,7 +165,7 @@ int main()
 	    const int nUnTagJet = untaggedJets.size();
 	    double Mass_W = 80.4;
 	    double massW;
-	    double minimiser = 10.;
+	    double minimiser = 1000.;
 	    //vector <Jet> WHadronicCandidate;
 
 	    for (int i =0; i < nUnTagJet; ++i) {
@@ -221,7 +217,7 @@ int main()
         }
         
         
-        // The histogram for the current group has been filled. Save it in the output file
+       // The histogram for the current group has been filled. Save it in the output file
         outFile.cd();
         histMtW.Write();
 	histInv3Jet.Write();
