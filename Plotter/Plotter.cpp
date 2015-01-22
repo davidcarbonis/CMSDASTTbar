@@ -228,7 +228,7 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         // Extract the label of the x axis of the MC stacked plot
         auto const pos1 = figureTitle.find_first_of(';');
         auto const pos2 = figureTitle.find_first_of(';', pos1 + 1);
-        string const xAxisTitle(figureTitle.substr(pos1 + 1, pos2 - pos1));
+        string const xAxisTitle(figureTitle.substr(pos1 + 1, pos2 - pos1 - 1));
         
         
         // Reset the title of the residuals histogram. It gets axis titles only
@@ -245,6 +245,8 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         TAxis *xAxis = residualsHist->GetXaxis();
         TAxis *yAxis = residualsHist->GetYaxis();
         
+        // Make axis label and titles of same size as in the main pad (the actual text size for the
+        //default font is linked up with the current pad's smallest dimension)
         xAxis->SetTitleSize(mcStack.GetXaxis()->GetTitleSize() *
          mainPad.GetHNDC() / residualsPad->GetHNDC());
         xAxis->SetLabelSize(mcStack.GetXaxis()->GetLabelSize() *
@@ -256,7 +258,7 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         
         yAxis->SetNdivisions(405);
         yAxis->CenterTitle();
-        yAxis->SetTitleOffset(1.5);
+        yAxis->SetTitleOffset(0.5);
         
         
         // Draw the residuals histogram
