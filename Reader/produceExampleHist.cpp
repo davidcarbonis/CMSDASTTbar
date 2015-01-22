@@ -67,13 +67,13 @@ int main()
     //Define here what processes (what trees) are grouped together and assign some meaningful name
     //to each group
     list<Group> groups;
-    //    groups.emplace_back(Group("Data", {"SingleMuRun2012A", "SingleMuRun2012B", "SingleMuRun2012C", "SingleMuRun2012D"}, false));
+    groups.emplace_back(Group("Data", {"SingleMuRun2012A", "SingleMuRun2012B", "SingleMuRun2012C", "SingleMuRun2012D"}, false));
     groups.emplace_back(Group("ttbar", {"TTJets"}));
-//    groups.emplace_back(Group("SingleTop", {"T_t-channel", "Tbar_t-channel", "T_tW-channel", "Tbar_tW-channel"}));
-//    groups.emplace_back(Group("Wjets", {"W1JetToLNu", "W2JetsToLNu", "W3JetsToLNu", "W4JetsToLNu"}));
-//    groups.emplace_back(Group("VV", {"WWJetsIncl", "WZJetsIncl", "ZZJetsIncl"}));
-//    groups.emplace_back(Group("DrellYan", {"DYJetsToLL_M-10To50", "DYJetsToLL_M-50"}));
-//    groups.emplace_back(Group("QCD", {"QCD_Pt-20to30_MuEnrichedPt5", "QCD_Pt-30to50_MuEnrichedPt5", "QCD_Pt-50to80_MuEnrichedPt5", "QCD_Pt-80to120_MuEnrichedPt5", "QCD_Pt-120to170_MuEnrichedPt5", "QCD_Pt-170to300_MuEnrichedPt5", "QCD_Pt-300to470_MuEnrichedPt5"}));
+    groups.emplace_back(Group("SingleTop", {"T_t-channel", "Tbar_t-channel", "T_tW-channel", "Tbar_tW-channel"}));
+    groups.emplace_back(Group("Wjets", {"W1JetToLNu", "W2JetsToLNu", "W3JetsToLNu", "W4JetsToLNu"}));
+    groups.emplace_back(Group("VV", {"WWJetsIncl", "WZJetsIncl", "ZZJetsIncl"}));
+    groups.emplace_back(Group("DrellYan", {"DYJetsToLL_M-10To50", "DYJetsToLL_M-50"}));
+    groups.emplace_back(Group("QCD", {"QCD_Pt-20to30_MuEnrichedPt5", "QCD_Pt-30to50_MuEnrichedPt5", "QCD_Pt-50to80_MuEnrichedPt5", "QCD_Pt-80to120_MuEnrichedPt5", "QCD_Pt-120to170_MuEnrichedPt5", "QCD_Pt-170to300_MuEnrichedPt5", "QCD_Pt-300to470_MuEnrichedPt5"}));
     
     
     // Create an output file to store the histograms that will be created
@@ -216,11 +216,11 @@ int main()
 	    }
 
 	    hLeptonMass.Fill(l.M());
-	    hNuMass.Fill( Nu4Momentum(l.P4(), met.Pt(), met.Phi() ).M() );
-	    hWmass1.Fill(massW);
-	    hWmass2.Fill(WLepton.M());
-	    hTopMass1.Fill(massTop1);
-	    hTopMass2.Fill(massTop2);
+	    hNuMass.Fill( Nu4Momentum(l.P4(), met.Pt(), met.Phi() ).M(), Reader.GetWeight() );
+	    hWmass1.Fill( massW, Reader.GetWeight() );
+	    hWmass2.Fill( WLepton.M(), Reader.GetWeight() );
+	    hTopMass1.Fill ( massTop1, Reader.GetWeight() );
+	    hTopMass2.Fill( massTop2, Reader.GetWeight() );
 
         }
         
