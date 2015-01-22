@@ -1,24 +1,27 @@
 #include <Plotter.hpp>
+#include <sstream>
 
-
-int main()
+int main(int argc, char **argv)
 {
+    std::stringstream lSStr; 
+    lSStr << argc;
+
     // Create a plotter
     Plotter plotter("MtW.root");
     
     // Specify the data histogram, along with a label to be used in the legend
-    plotter.AddDataHist("Data", " Data ");
+    plotter.AddDataHist(("Data_hTopMass"+lSStr.str()).c_str(), " Data ");
     
     // Specify MC histograms, along with their colours and legend labels
-    plotter.AddMCHist("ttbar", kOrange + 1, " t#bar{t} ");
-    plotter.AddMCHist("SingleTop", kRed + 1, " t ");
-    plotter.AddMCHist("Wjets", kGreen + 1, " W+jets ");
-    plotter.AddMCHist("VV", kCyan, " VV ");
-    plotter.AddMCHist("DrellYan", kAzure, " Z/#gamma* ");
-    plotter.AddMCHist("QCD", kGray, " QCD ");
+    plotter.AddMCHist(("ttbar_hTopMass"+lSStr.str()).c_str(), kOrange + 1, " t#bar{t} ");
+    plotter.AddMCHist(("SingleTop_hTopMass"+lSStr.str()).c_str(), kRed + 1, " t ");
+    plotter.AddMCHist(("Wjets_hTopMass"+lSStr.str()).c_str(), kGreen + 1, " W+jets ");
+    plotter.AddMCHist(("VV_hTopMass"+lSStr.str()).c_str(), kCyan, " VV ");
+    plotter.AddMCHist(("DrellYan_hTopMass"+lSStr.str()).c_str(), kAzure, " Z/#gamma* ");
+    plotter.AddMCHist(("QCD_hTopMass"+lSStr.str()).c_str(), kGray, " QCD ");
     
     // Produce files with pictures
-    plotter.Plot("Transverse W mass;M_{T}(W), GeV;Events", "MtW");
+    plotter.Plot("Top mass;M(t), GeV;Events", "TopMass");
     
     
     return EXIT_SUCCESS;
