@@ -191,7 +191,7 @@ int main()
 
 	    //W from lepton channel
 	    TLorentzVector WLepton;
-	    WLepton = Nu4Momentum();
+	    WLepton = Nu4Momentum(l.P4(), met.Pt(), met.Phi());
 
 	    double massTop1, massTop2;
 	    double mtWHad1, mtWHad2;
