@@ -55,10 +55,11 @@ int main()
     
     
     // Open the source ROOT file
-    shared_ptr<TFile> srcFile(TFile::Open("/data/shared/Long_Exercise_TTbar/mujets_v3.root"));
-    //shared_ptr<TFile> srcFile(TFile::Open("/afs/cern.ch/work/j/jandrea/public/proof_merged.root"));
+    //shared_ptr<TFile> srcFile(TFile::Open("/data/shared/Long_Exercise_TTbar/mujets_v3.root"));
+    shared_ptr<TFile> srcFile(TFile::Open("/afs/cern.ch/work/j/jandrea/public/proof_merged.root"));
     //^ There are copies at CMS DAS machines and AFS
     
+    TH1D lLeadingJetMassHist("LeadingJetMass", "Leading Jet mass; M_{T}, GeV; Events", 250, 0., 500.);
     
     // There are trees for many processes in the source file. The processes will be combined into
     //several groups, and an independent histogram will be produced for all processes in each group.
@@ -97,12 +98,6 @@ int main()
         // Create a histogram to be filled. It is named after the group
         TH1D histMtW(group.name.c_str(), "Transverse W mass;M_{T}(W), GeV;Events", 60, 0., 120.);
         
-        
-        // The histogram will be filled with weighted events. Indicate that the weight should be
-        //accounted in bin uncertainties
-        histMtW.Sumw2();
-        
-        
         // Loop over all events in the current group of processes
         while (reader.ReadNextEvent())
         {
@@ -134,8 +129,22 @@ int main()
             
             if (nGoodJets < 4)
                 continue;
-            
-            
+	
+	    // Calculate invariant mass of 3 leading jets
+	    unsigned nLoop = 0;
+	    TLorentzVector lJetMass;
+	    for (auto const &j: jets)            
+	    {
+	      TLorentzVector Mjets = j.P4();
+	      lJetMass = lJetMass + j.P4();
+	      ++nLoop;
+	      if (nLoop >= 2)
+		break;
+	    }
+
+	    //	    std::cout << lJetMass.M() << std::endl;
+	    lLeadingJetMassHist.Fill( lJetMass.M() );
+
             // Calculate the variable of interest
             MET const &met = reader.GetMET();
             double const MtW = sqrt(pow(l.Pt() + met.Pt(), 2) -
@@ -152,7 +161,8 @@ int main()
         histMtW.Write();
     }
     
-    
+    outFile.cd();
+    lLeadingJetMassHist.Write();    
     cout << "Done. Results are saved in the file \"" << outFile.GetName() << "\".\n";
     
     
