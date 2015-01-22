@@ -7,6 +7,7 @@
 #include <iostream>
 #include <memory>
 
+#include <TLorentzVector.h>
 
 using namespace std;
 
@@ -55,11 +56,10 @@ int main()
     
     
     // Open the source ROOT file
-    //shared_ptr<TFile> srcFile(TFile::Open("/data/shared/Long_Exercise_TTbar/mujets_v3.root"));
-    shared_ptr<TFile> srcFile(TFile::Open("/afs/cern.ch/work/j/jandrea/public/proof_merged.root"));
+    shared_ptr<TFile> srcFile(TFile::Open("/data/shared/Long_Exercise_TTbar/mujets_v3.root"));
+    //shared_ptr<TFile> srcFile(TFile::Open("/afs/cern.ch/work/j/jandrea/public/proof_merged.root"));
     //^ There are copies at CMS DAS machines and AFS
     
-    TH1D lLeadingJetMassHist("LeadingJetMass", "Leading Jet mass; M_{T}, GeV; Events", 250, 0., 500.);
     
     // There are trees for many processes in the source file. The processes will be combined into
     //several groups, and an independent histogram will be produced for all processes in each group.
@@ -83,6 +83,9 @@ int main()
     // Create an output file to store the histograms that will be created
     TFile outFile("MtW.root", "recreate");
     
+    vector<Jet const *>bTaggedJets, untaggedJets;  // move to class definition
+    vector<Jet const *> WHadronicCandidate;
+    //vector<Jet> WHad;
     
     // Loop over the groups
     for (auto const &group: groups)
@@ -96,7 +99,10 @@ int main()
         
         
         // Create a histogram to be filled. It is named after the group
-        TH1D histMtW(group.name.c_str(), "Transverse W mass;M_{T}(W), GeV;Events", 60, 0., 120.);
+        TH1D histMtW((group.name+"_histMtW").c_str(), "Transverse W mass;M_{T}(W), GeV;Events", 100., 0., 200.);
+        TH1D histInv3Jet((group.name+"_histInv3Jet").c_str(), "Invariant mass of 3 leading jet; M(jjj), GeV; Events", 300., 0., 600.);
+	TH1D hTopMass1((group.name+"_hTopMass1").c_str(), "Top mass 1; M(top), GeV; Events", 300., 0., 600.);
+	TH1D hTopMass2((group.name+"_hTopMass2").c_str(), "Top mass 1; M(top), GeV; Events", 300., 0., 600.);
         
         // Loop over all events in the current group of processes
         while (reader.ReadNextEvent())
@@ -117,52 +123,114 @@ int main()
             // Require that there are at least four central jets with pt > 30 GeV
             auto const &jets = reader.GetJets();
             unsigned nGoodJets = 0;
+	    float mass;
+	    int nSelJet = 0;
+
+	    //vector<Jet const *> bTaggedJets, untaggedJets;  // move to class definition
+	    bTaggedJets.clear();
+	    untaggedJets.clear();
             
-            for (auto const &j: jets)
+            for (Jet const &j: jets)
             {
                 if (j.Pt() < 30.)  // jets are ordered in pt
                     break;
-                
-                if (fabs(j.Eta()) < 2.4)
-                    ++nGoodJets;
+                ++nSelJet;
+
+                //if (fabs(j.Eta()) < 2.4)
+		if (fabs(j.Eta()) > 2.4) continue;
+		++nGoodJets;
+
+		if (j.BTag() > 0.679)
+		  bTaggedJets.push_back(&j);
+		else
+		  untaggedJets.push_back(&j);
             }
-            
-            if (nGoodJets < 4)
-                continue;
-	
-	    // Calculate invariant mass of 3 leading jets
-	    unsigned nLoop = 0;
-	    TLorentzVector lJetMass;
-	    for (auto const &j: jets)            
-	    {
-	      TLorentzVector Mjets = j.P4();
-	      lJetMass = lJetMass + j.P4();
-	      ++nLoop;
-	      if (nLoop >= 2)
-		break;
+
+	    if (bTaggedJets.size() != 2) continue;
+
+
+      	    if (nSelJet > 3) {
+	      mass = (jets.at(0).P4()+ jets.at(1).P4()+ jets.at(2).P4()).M();
+	      histInv3Jet.Fill(mass, reader.GetWeight());
 	    }
 
-	    //	    std::cout << lJetMass.M() << std::endl;
-	    lLeadingJetMassHist.Fill( lJetMass.M() );
-
+            if (nGoodJets < 4)
+                continue;
+            
             // Calculate the variable of interest
             MET const &met = reader.GetMET();
             double const MtW = sqrt(pow(l.Pt() + met.Pt(), 2) -
              pow(l.P4().Px() + met.P4().Px(), 2) - pow(l.P4().Py() + met.P4().Py(), 2));
-            
-            
+                        
             // Fill the histogram. Note that simulated events are weighted
             histMtW.Fill(MtW, reader.GetWeight());
+
+	    //loop to choose 2 jets from W candidate
+	    const int nUnTagJet = untaggedJets.size();
+	    double Mass_W = 80.4;
+	    double massW;
+	    double minimiser = 10.;
+	    //vector <Jet> WHadronicCandidate;
+
+	    for (int i =0; i < nUnTagJet; ++i) {
+	      for (int j = i+1; j < nUnTagJet; ++j) {
+		massW = (untaggedJets.at(i)->P4() + untaggedJets.at(j)->P4()).M();
+
+		if ( fabs(massW-Mass_W) < minimiser) {
+
+		  minimiser = fabs(massW-Mass_W);
+		  WHadronicCandidate.clear();
+		  WHadronicCandidate.push_back(untaggedJets.at(i));
+		  WHadronicCandidate.push_back(untaggedJets.at(j));
+		}
+	      }
+	    }
+
+	    if (WHadronicCandidate.size() != 2) continue;
+	    //WHad = WHadronicCandidate.at(0) + WHadronicCandidate.at(1); // W from quark decay
+
+	    //W from lepton channel
+	    TLorentzVector WLepton;
+	    WLepton = met.P4() + l.P4();
+
+	    double massTop1, massTop2;
+	    double mtWHad1, mtWHad2;
+	    double mtWLep1, mtWLep2;
+
+	    //mtWHad1 = (bTaggedJets.at(0).P4 + WHad.P4()).M();
+	    //mtWHad2 = (bTaggedJets.at(1).P4 + WHad.P4()).M();
+
+	    mtWHad1 = (bTaggedJets.at(0)->P4() + WHadronicCandidate.at(0)->P4() + WHadronicCandidate.at(1)->P4()).M();
+	    mtWHad2 = (bTaggedJets.at(1)->P4() + WHadronicCandidate.at(0)->P4() + WHadronicCandidate.at(1)->P4()).M();
+
+	    mtWLep1 = (bTaggedJets.at(0)->P4() + WLepton).M();
+	    mtWLep2 = (bTaggedJets.at(1)->P4() + WLepton).M();
+
+	    if (fabs(mtWHad1 - mtWLep2) < fabs(mtWHad2 - mtWLep1)) {
+	      massTop1 = mtWHad1;
+	      massTop2 = mtWLep2;
+	    }
+	    else {
+	      massTop1 = mtWHad2;
+	      massTop2 = mtWLep1;
+	    }
+
+	    hTopMass1.Fill(massTop1);
+	    hTopMass2.Fill(massTop2);
+
         }
         
         
         // The histogram for the current group has been filled. Save it in the output file
         outFile.cd();
         histMtW.Write();
+	histInv3Jet.Write();
+	hTopMass1.Write();
+	hTopMass2.Write();
+
     }
     
-    outFile.cd();
-    lLeadingJetMassHist.Write();    
+    
     cout << "Done. Results are saved in the file \"" << outFile.GetName() << "\".\n";
     
     
