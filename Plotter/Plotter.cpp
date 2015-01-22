@@ -8,7 +8,6 @@
 
 #include <stdexcept>
 #include <sstream>
-/**/#include <iostream>
 
 
 using namespace std;
@@ -210,6 +209,7 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         residualsPad->SetLeftMargin(margin / residualsPad->GetWNDC());
         residualsPad->SetRightMargin(margin / residualsPad->GetWNDC());
         residualsPad->SetBottomMargin(margin / residualsPad->GetHNDC());
+        residualsPad->SetTopMargin(0.);
         
         
         // Decoration of the pad
@@ -259,6 +259,13 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         yAxis->SetNdivisions(405);
         yAxis->CenterTitle();
         yAxis->SetTitleOffset(0.5);
+        
+        
+        // Alter the y axis so that its labels do not overlap with the ones of the stacked plot.
+        //In the code "5" is the number of primary divisions
+        double const tickOffset = (residualsHist->GetMaximum() - residualsHist->GetMinimum()) /
+         5 * 0.6;
+        residualsHist->SetMaximum(residualsHist->GetMaximum() + tickOffset);
         
         
         // Draw the residuals histogram
