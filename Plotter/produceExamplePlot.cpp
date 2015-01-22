@@ -1,10 +1,12 @@
 #include <Plotter.hpp>
 #include <sstream>
+#include <iostream>
 
 int main(int argc, char **argv)
 {
     std::stringstream lSStr; 
-    lSStr << argc;
+    lSStr << argv[1];
+//    std::cout << "argv:" << argv[1] << std::endl;
 
     // Create a plotter
     Plotter plotter("MtW.root");
@@ -21,7 +23,7 @@ int main(int argc, char **argv)
     plotter.AddMCHist(("QCD_hTopMass"+lSStr.str()).c_str(), kGray, " QCD ");
     
     // Produce files with pictures
-    plotter.Plot("Top mass;M(t), GeV;Events", "TopMass");
+    plotter.Plot( "Top mass;M(t), GeV;Events", "TopMass"+lSStr.str() );
     
     
     return EXIT_SUCCESS;
