@@ -101,8 +101,8 @@ int main()
         // Create a histogram to be filled. It is named after the group
         TH1D histMtW((group.name+"_histMtW").c_str(), "Transverse W mass;M_{T}(W), GeV;Events", 100., 0., 200.);
         TH1D histInv3Jet((group.name+"_histInv3Jet").c_str(), "Invariant mass of 3 leading jet; M(jjj), GeV; Events", 300., 0., 600.);
-	TH1D hTopMass1((group.name+"_hTopMass1").c_str(), "Top mass 1; M(top), GeV; Events", 300., 0., 600.);
-	TH1D hTopMass2((group.name+"_hTopMass2").c_str(), "Top mass 1; M(top), GeV; Events", 300., 0., 600.);
+	TH1D hTopMass1((group.name+"_hTopMass1").c_str(), "Top mass Hadronic; M(top), GeV; Events", 300., 0., 600.);
+	TH1D hTopMass2((group.name+"_hTopMass2").c_str(), "Top mass Leptonic; M(top), GeV; Events", 300., 0., 600.);
         
         // Loop over all events in the current group of processes
         while (reader.ReadNextEvent())
@@ -191,7 +191,7 @@ int main()
 
 	    //W from lepton channel
 	    TLorentzVector WLepton;
-	    WLepton = Nu4Momentum(l.P4(), met.Pt(), met.Phi());
+	    WLepton = Nu4Momentum(l.P4(), met.Pt(), met.Phi()) + l.P4(); //Nu 4mom + lepton 4mon
 
 	    double massTop1, massTop2;
 	    double mtWHad1, mtWHad2;
