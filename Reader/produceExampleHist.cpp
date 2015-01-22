@@ -215,12 +215,12 @@ int main()
 	      massTop2 = mtWLep1;
 	    }
 
-	    hLeptonMass.Fill(l.M());
-	    hNuMass.Fill( Nu4Momentum(l.P4(), met.Pt(), met.Phi() ).M(), Reader.GetWeight() );
-	    hWmass1.Fill( massW, Reader.GetWeight() );
-	    hWmass2.Fill( WLepton.M(), Reader.GetWeight() );
-	    hTopMass1.Fill ( massTop1, Reader.GetWeight() );
-	    hTopMass2.Fill( massTop2, Reader.GetWeight() );
+	    hLeptonMass.Fill( l.M(), reader.GetWeight() );
+	    hNuMass.Fill( Nu4Momentum(l.P4(), met.Pt(), met.Phi() ).M(), reader.GetWeight() );
+	    hWmass1.Fill( massW, reader.GetWeight() );
+	    hWmass2.Fill( WLepton.M(), reader.GetWeight() );
+	    hTopMass1.Fill ( massTop1, reader.GetWeight() );
+	    hTopMass2.Fill( massTop2, reader.GetWeight() );
 
         }
         
