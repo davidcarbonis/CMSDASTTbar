@@ -56,8 +56,8 @@ int main()
     
     
     // Open the source ROOT file
-    shared_ptr<TFile> srcFile(TFile::Open("/data/shared/Long_Exercise_TTbar/mujets_v3.root"));
-    //shared_ptr<TFile> srcFile(TFile::Open("/afs/cern.ch/work/j/jandrea/public/proof_merged.root"));
+    //shared_ptr<TFile> srcFile(TFile::Open("/data/shared/Long_Exercise_TTbar/mujets_v3.root"));
+    shared_ptr<TFile> srcFile(TFile::Open("/afs/cern.ch/work/j/jandrea/public/proof_merged.root"));
     //^ There are copies at CMS DAS machines and AFS
     
     
