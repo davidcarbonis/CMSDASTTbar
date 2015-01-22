@@ -22,8 +22,7 @@ Plotter::Plotter(string const &srcFileName):
 void Plotter::AddDataHist(string const &name, string const &legendLabel)
 {
     // Get the histogram from the file
-    //TH1 *hist = dynamic_cast<TH1 *>(srcFile->Get(name.c_str()));
-    TH1 *hist = (TH1 *)(srcFile->Get(name.c_str()));
+    TH1 *hist = dynamic_cast<TH1 *>(srcFile->Get(name.c_str()));
     
     
     // Check if such histogram exists
@@ -52,8 +51,7 @@ void Plotter::AddDataHist(string const &name, string const &legendLabel)
 void Plotter::AddMCHist(string const &name, Color_t colour, string const &legendLabel)
 {
     // Get the histogram from the file
-    //TH1 *hist = dynamic_cast<TH1 *>(srcFile->Get(name.c_str()));
-    TH1 *hist = (TH1 *)(srcFile->Get(name.c_str()));
+    TH1 *hist = dynamic_cast<TH1 *>(srcFile->Get(name.c_str()));
     
     
     // Check if such histogram exists
@@ -189,14 +187,14 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     {
         // Create a histogram with total MC expectation. Use a pointer rather than an object in
         //order to infer in terms of the base class
-        unique_ptr<TH1> mcTotalHist((TH1 *)(mcHists.front()->Clone("mcTotalHist")));
+        unique_ptr<TH1> mcTotalHist(dynamic_cast<TH1 *>(mcHists.front()->Clone("mcTotalHist")));
         
         for (unsigned i = 1; i < mcHists.size(); ++i)
             mcTotalHist->Add(mcHists.at(i).get());
         
         
         // Create a histogram with residuals. Again avoid referring to a concrete histogram class
-        residualsHist.reset(((TH1 *)(dataHist->Clone("residualsHist"))));
+        residualsHist.reset((dynamic_cast<TH1 *>(dataHist->Clone("residualsHist"))));
         residualsHist->Add(mcTotalHist.get(), -1);
         residualsHist->Divide(mcTotalHist.get());
                 
