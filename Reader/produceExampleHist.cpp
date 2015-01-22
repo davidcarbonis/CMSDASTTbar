@@ -2,6 +2,7 @@
 #include <CalculatePzNu.hpp>
 #include <TFile.h>
 #include <TH1D.h>
+#include <TLatex.h>
 
 #include <list>
 #include <iostream>
@@ -98,7 +99,11 @@ int main()
         TH1D histInv3Jet((group.name+"_histInv3Jet").c_str(), "Invariant mass of 3 leading jet; M(jjj), GeV; Events", 300., 0., 600.);
 	TH1D hTopMass1((group.name+"_hTopMass1").c_str(), "Top mass Hadronic; M(top), GeV; Events", 300., 0., 600.);
 	TH1D hTopMass2((group.name+"_hTopMass2").c_str(), "Top mass Leptonic; M(top), GeV; Events", 300., 0., 600.);
-        
+	TH1D hWmass1((group.name+"_hWmass1").c_str(), "W mass from Hadronic Decay; M(W), GeV; Events", 300.0, 0., 600.0);
+	TH1D hWmass2((group.name+"_hWmass2").c_str(), "W mass from Leptonic Decay; M(W), GeV; Events", 300.0, 0.0, 600.0);
+	TH1D hLeptonMass((group.name+"_hLeptonMass").c_str(), "Lepton Mass; M(l), GeV; Events", 300.0, 0.0, 600.0);
+	TH1D hNuMass((group.name+"_hNuMass").c_str(), "Neutrino Mass; M(#nu), GeV; Events", 300.0, 0.0, 600.0);
+
         // Loop over all events in the current group of processes
         while (reader.ReadNextEvent())
         {
@@ -183,7 +188,6 @@ int main()
 	    }
 
 	    if (WHadronicCandidate.size() != 2) continue;
-	    //WHad = WHadronicCandidate.at(0) + WHadronicCandidate.at(1); // W from quark decay
 
 	    //W from lepton channel
 	    TLorentzVector WLepton;
@@ -211,6 +215,10 @@ int main()
 	      massTop2 = mtWLep1;
 	    }
 
+	    hLeptonMass.Fill(l.M());
+	    hNuMass.Fill( Nu4Momentum(l.P4(), met.Pt(), met.Phi() ).M() );
+	    hWmass1.Fill(massW);
+	    hWmass2.Fill(WLepton.M());
 	    hTopMass1.Fill(massTop1);
 	    hTopMass2.Fill(massTop2);
 
@@ -221,6 +229,10 @@ int main()
         outFile.cd();
         histMtW.Write();
 	histInv3Jet.Write();
+	hLeptonMass.Write();
+	hNuMass.Write();
+	hWmass1.Write();
+	hWmass2.Write();
 	hTopMass1.Write();
 	hTopMass2.Write();
 
