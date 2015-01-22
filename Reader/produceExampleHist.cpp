@@ -98,6 +98,11 @@ int main()
         TH1D histMtW(group.name.c_str(), "Transverse W mass;M_{T}(W), GeV;Events", 60, 0., 120.);
         
         
+        // The histogram will be filled with weighted events. Indicate that the weight should be
+        //accounted in bin uncertainties
+        histMtW->Sumw2();
+        
+        
         // Loop over all events in the current group of processes
         while (reader.ReadNextEvent())
         {
