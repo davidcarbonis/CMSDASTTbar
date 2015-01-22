@@ -62,4 +62,7 @@ private:
     
     /// Histograms for simulation
     std::vector<std::unique_ptr<TH1>> mcHists;
+    
+    /// Indicates if the data/MC residuals should be plotted
+    bool plotResiduals;
 };

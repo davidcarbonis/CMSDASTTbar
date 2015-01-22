@@ -14,7 +14,7 @@ int main()
     plotter.AddMCHist("SingleTop", kRed + 1, " t ");
     plotter.AddMCHist("Wjets", kGreen + 1, " W+jets ");
     plotter.AddMCHist("VV", kCyan, " VV ");
-    plotter.AddMCHist("DrellYan", kAzure, " Drell-Yan ");
+    plotter.AddMCHist("DrellYan", kAzure, " Z/#gamma* ");
     plotter.AddMCHist("QCD", kGray, " QCD ");
     
     // Produce files with pictures

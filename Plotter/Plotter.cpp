@@ -8,13 +8,15 @@
 
 #include <stdexcept>
 #include <sstream>
+/**/#include <iostream>
 
 
 using namespace std;
 
 
 Plotter::Plotter(string const &srcFileName):
-    srcFile(TFile::Open(srcFileName.c_str()))
+    srcFile(TFile::Open(srcFileName.c_str())),
+    plotResiduals(true)
 {}
 
 
@@ -106,7 +108,34 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
     // Global decoration settings
     gStyle->SetErrorX(0.);
     gStyle->SetHistMinimumZero(kTRUE);
+    gStyle->SetOptStat(0);
     TGaxis::SetMaxDigits(3);
+    
+    
+    // Setup layout of pads within the canvas
+    // Allow space for the residuals plot if requested
+    double const bottomSpacing = (plotResiduals) ? 0.2 : 0.;
+    
+    // Margin for axis labels
+    double const margin = 0.1;
+    
+    // Width of the main pad
+    double const mainPadWidth = 0.85;
+    
+    
+    // Create a canvas and pads to draw in
+    TCanvas canvas("canvas", "", 1500, 1000 / (1. - bottomSpacing));
+    
+    TPad mainPad("mainPad", "", 0., bottomSpacing, mainPadWidth + margin, 1.);
+    mainPad.SetTicks();
+    
+    // Adjust margins to host axis labels (otherwise they would be cropped)
+    mainPad.SetLeftMargin(margin / mainPad.GetWNDC());
+    mainPad.SetRightMargin(margin / mainPad.GetWNDC());
+    mainPad.SetBottomMargin(margin / mainPad.GetHNDC());
+    mainPad.SetTopMargin(margin / mainPad.GetHNDC());
+    
+    mainPad.Draw();
     
     
     // Put MC histogramss into a stack
@@ -129,16 +158,8 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         legend.AddEntry(h.get(), h->GetTitle(), "f");
     
     
-    // Create a canvas and a pad to draw in
-    TCanvas canvas("canvas", "", 1500, 1000);
-    
-    TPad drawPad("drawPad", "", 0., 0., 0.94, 1.);
-    drawPad.SetTicks();
-    drawPad.Draw();
-    
-    
     // Draw the MC stack and the data histogram
-    drawPad.cd();
+    mainPad.cd();
     mcStack.Draw();
     
     if (dataHist)
@@ -156,6 +177,67 @@ void Plotter::Plot(string const &figureTitle, string const &outFileName)
         double const histMax = 1.1 * max(mcStack.GetMaximum(), dataHist->GetMaximum());
         mcStack.SetMaximum(histMax);
         dataHist->SetMaximum(histMax);
+    }
+    
+    
+    // Plot residuals histogram if needed
+    unique_ptr<TPad> residualsPad;
+    unique_ptr<TH1> residualsHist;
+    
+    if (plotResiduals)
+    {
+        // Create a histogram with total MC expectation. Use a pointer rather than an object in
+        //order to infer in terms of the base class
+        unique_ptr<TH1> mcTotalHist((TH1 *)(mcHists.front()->Clone("mcTotalHist")));
+        
+        for (unsigned i = 1; i < mcHists.size(); ++i)
+            mcTotalHist->Add(mcHists.at(i).get());
+        
+        
+        // Create a histogram with residuals. Again avoid referring to a concrete histogram class
+        residualsHist.reset(((TH1 *)(dataHist->Clone("residualsHist"))));
+        residualsHist->Add(mcTotalHist.get(), -1);
+        residualsHist->Divide(mcTotalHist.get());
+                
+        
+        // Create a pad to draw residuals
+        residualsPad.reset(new TPad("residualsPad", "", 0., 0., mainPadWidth + margin,
+         bottomSpacing + margin));
+        
+        
+        // Adjust the pad's margins so that axis labels are not cropped
+        residualsPad->SetLeftMargin(margin / residualsPad->GetWNDC());
+        residualsPad->SetRightMargin(margin / residualsPad->GetWNDC());
+        residualsPad->SetBottomMargin(margin / residualsPad->GetHNDC());
+        
+        
+        // Decoration of the pad
+        residualsPad->SetTicks();
+        residualsPad->SetGrid(0, 1);
+        
+        residualsPad->SetFillStyle(0);
+        //^ Needed not to oscure the lower half of the zero label in the mainPad
+        
+        
+        // Draw the pad
+        canvas.cd();
+        residualsPad->Draw();
+        
+        
+        // Decoration of the residuals histogram
+        residualsHist->SetMinimum(-0.2);
+        residualsHist->SetMaximum(0.2);
+        
+        residualsHist->SetMarkerStyle(20);
+        
+        
+        // Draw the residuals histogram
+        residualsPad->cd();
+        residualsHist->Draw("p0 e1");
+        
+        
+        // Remove the labels from x axis of the main histogram
+        mcStack.GetXaxis()->SetLabelOffset(999.);
     }
     
     
