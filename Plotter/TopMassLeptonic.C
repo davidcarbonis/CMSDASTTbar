@@ -109,7 +109,7 @@
    DrellYan_hTopMass2->SetBinContent(118,1.911058);
    DrellYan_hTopMass2->SetBinContent(120,1.580209);
    DrellYan_hTopMass2->SetBinContent(125,3.166805);
-   DrellYan_hTopMass2>SetBinContent(127,2.368583);
+   DrellYan_hTopMass2->SetBinContent(127,2.368583);
    DrellYan_hTopMass2->SetBinContent(131,1.23111);
    DrellYan_hTopMass2->SetBinContent(136,1.925073);
    DrellYan_hTopMass2->SetBinContent(138,2.674808);
