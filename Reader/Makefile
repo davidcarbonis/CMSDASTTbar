@@ -6,9 +6,12 @@ LDFLAGS = $(shell root-config --libs) -lTreePlayer -lHistPainter
 
 .PHONY: clean
 
-all: produceExampleHist
+all: produceExampleHist produceNEventsHist_Btagsyt
 
 produceExampleHist: produceExampleHist.o PhysicsObjects.o CSVReweighter.o Reader.o
+	@ g++ $+ $(CFLAGS) $(LDFLAGS) -o $@
+
+produceNEventsHist_Btagsyt: produceNEventsHist_Btagsyt.o Reader.o PhysicsObjects.o CSVReweighter.o
 	@ g++ $+ $(CFLAGS) $(LDFLAGS) -o $@
 
 %.o: %.cpp
